@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2, Github } from 'lucide-react';
+import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2 } from 'lucide-react';
 import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
 import { supabase } from './lib/supabase';
@@ -286,7 +286,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                 style={{padding: '16px', display: 'flex', justifyContent: 'center', gap: '12px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-light)'}}
                 onClick={() => supabase.auth.signInWithOAuth({ provider: 'github' })}
               >
-                <Github size={20} />
+                <Code size={20} />
                 Continue with GitHub
               </button>
             </div>
