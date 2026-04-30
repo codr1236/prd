@@ -23,11 +23,14 @@ import {
   Mail,
   ArrowRight,
   Globe,
+  User,
+  Zap,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 export default function LoginCardSection() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isRegister, setIsRegister] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
@@ -112,17 +115,13 @@ export default function LoginCardSection() {
         @keyframes drawY{0%{transform:scaleY(0);opacity:0}60%{opacity:.95}100%{transform:scaleY(1);opacity:.7}}
         @keyframes shimmer{0%{opacity:0}35%{opacity:.25}100%{opacity:0}}
 
-        /* === Card minimal fade-up animation === */
         .card-animate {
           opacity: 0;
           transform: translateY(20px);
           animation: fadeUp 0.8s cubic-bezier(.22,.61,.36,1) 0.4s forwards;
         }
         @keyframes fadeUp {
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
 
@@ -146,10 +145,13 @@ export default function LoginCardSection() {
       />
 
       {/* Header */}
-      <header className="absolute left-0 right-0 top-0 flex items-center justify-between px-6 py-4 border-b border-zinc-800/80">
-        <span className="text-xs tracking-[0.14em] uppercase text-zinc-400">
-          NOVA
-        </span>
+      <header className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-zinc-800/80">
+        <div className="flex items-center gap-2">
+          <Zap className="h-4 w-4 text-zinc-300" />
+          <span className="text-xs tracking-[0.14em] uppercase text-zinc-400 font-medium">
+            VibePRD
+          </span>
+        </div>
         <Button
           variant="outline"
           className="h-9 rounded-lg border-zinc-800 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/80"
@@ -159,112 +161,240 @@ export default function LoginCardSection() {
         </Button>
       </header>
 
-      {/* Centered Login Card */}
+      {/* Centered Card */}
       <div className="h-full w-full grid place-items-center px-4">
-        <Card className="card-animate w-full max-sm:px-0 border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60 max-w-sm">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">Welcome back</CardTitle>
-            <CardDescription className="text-zinc-400">
-              Sign in to your account
-            </CardDescription>
-          </CardHeader>
+        {!isRegister ? (
+          /* ===== LOGIN CARD ===== */
+          <Card className="card-animate w-full max-w-sm border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl">Welcome back</CardTitle>
+              <CardDescription className="text-zinc-400">
+                Sign in to your account
+              </CardDescription>
+            </CardHeader>
 
-          <CardContent className="grid gap-5">
-            <div className="grid gap-2">
-              <Label htmlFor="email" className="text-zinc-300">
-                Email
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="pl-10 bg-zinc-950 border-zinc-800 text-zinc-50 placeholder:text-zinc-600"
-                />
+            <CardContent className="grid gap-5">
+              <div className="grid gap-2">
+                <Label htmlFor="login-email" className="text-zinc-300">
+                  Email
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Input
+                    id="login-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    className="pl-10 bg-zinc-950 border-zinc-800 text-zinc-50 placeholder:text-zinc-600"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="password" className="text-zinc-300">
-                Password
-              </Label>
+              <div className="grid gap-2">
+                <Label htmlFor="login-password" className="text-zinc-300">
+                  Password
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Input
+                    id="login-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="pl-10 pr-10 bg-zinc-950 border-zinc-800 text-zinc-50 placeholder:text-zinc-600"
+                  />
+                  <button
+                    type="button"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-md text-zinc-400 hover:text-zinc-200"
+                    onClick={() => setShowPassword((v) => !v)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="remember"
+                    className="border-zinc-700 data-[state=checked]:bg-zinc-50 data-[state=checked]:text-zinc-900"
+                  />
+                  <Label htmlFor="remember" className="text-zinc-400 text-sm cursor-pointer">
+                    Remember me
+                  </Label>
+                </div>
+                <a href="#" className="text-sm text-zinc-300 hover:text-zinc-100 transition-colors">
+                  Forgot password?
+                </a>
+              </div>
+
+              <Button className="w-full h-10 rounded-lg bg-zinc-50 text-zinc-900 hover:bg-zinc-200 font-semibold">
+                Continue
+              </Button>
+
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="pl-10 pr-10 bg-zinc-950 border-zinc-800 text-zinc-50 placeholder:text-zinc-600"
-                />
-                <button
-                  type="button"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-md text-zinc-400 hover:text-zinc-200"
-                  onClick={() => setShowPassword((v) => !v)}
+                <Separator className="bg-zinc-800" />
+                <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-zinc-900/70 px-2 text-[11px] uppercase tracking-widest text-zinc-500">
+                  or
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  variant="outline"
+                  className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
+                  onClick={() => supabase.auth.signInWithOAuth({ provider: 'github' })}
                 >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
+                  <Code2 className="h-4 w-4 mr-2" />
+                  GitHub
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
+                  onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}
+                >
+                  <Globe className="h-4 w-4 mr-2" />
+                  Google
+                </Button>
               </div>
-            </div>
+            </CardContent>
 
-            <div className="flex items-center justify-between">
+            <CardFooter className="flex items-center justify-center text-sm text-zinc-400">
+              Don&apos;t have an account?
+              <button
+                onClick={() => { setIsRegister(true); setShowPassword(false); }}
+                className="ml-1 text-zinc-200 hover:underline bg-transparent border-none p-0 text-sm cursor-pointer font-normal"
+              >
+                Create one
+              </button>
+            </CardFooter>
+          </Card>
+        ) : (
+          /* ===== REGISTER CARD ===== */
+          <Card className="card-animate w-full max-w-sm border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl">Create an account</CardTitle>
+              <CardDescription className="text-zinc-400">
+                Get started with VibePRD
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="grid gap-5">
+              <div className="grid gap-2">
+                <Label htmlFor="reg-name" className="text-zinc-300">
+                  Full Name
+                </Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Input
+                    id="reg-name"
+                    type="text"
+                    placeholder="Your name"
+                    className="pl-10 bg-zinc-950 border-zinc-800 text-zinc-50 placeholder:text-zinc-600"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="reg-email" className="text-zinc-300">
+                  Email
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Input
+                    id="reg-email"
+                    type="email"
+                    placeholder="you@example.com"
+                    className="pl-10 bg-zinc-950 border-zinc-800 text-zinc-50 placeholder:text-zinc-600"
+                  />
+                </div>
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="reg-password" className="text-zinc-300">
+                  Password
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                  <Input
+                    id="reg-password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    className="pl-10 pr-10 bg-zinc-950 border-zinc-800 text-zinc-50 placeholder:text-zinc-600"
+                  />
+                  <button
+                    type="button"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-md text-zinc-400 hover:text-zinc-200"
+                    onClick={() => setShowPassword((v) => !v)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
               <div className="flex items-center gap-2">
                 <Checkbox
-                  id="remember"
+                  id="terms"
                   className="border-zinc-700 data-[state=checked]:bg-zinc-50 data-[state=checked]:text-zinc-900"
                 />
-                <Label htmlFor="remember" className="text-zinc-400">
-                  Remember me
+                <Label htmlFor="terms" className="text-zinc-400 text-sm cursor-pointer">
+                  I agree to the{" "}
+                  <a href="#" className="text-zinc-200 hover:underline">Terms</a>
+                  {" "}and{" "}
+                  <a href="#" className="text-zinc-200 hover:underline">Privacy Policy</a>
                 </Label>
               </div>
-              <a href="#" className="text-sm text-zinc-300 hover:text-zinc-100">
-                Forgot password?
-              </a>
-            </div>
 
-            <Button className="w-full h-10 rounded-lg bg-zinc-50 text-zinc-900 hover:bg-zinc-200">
-              Continue
-            </Button>
-
-            <div className="relative">
-              <Separator className="bg-zinc-800" />
-              <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-zinc-900/70 px-2 text-[11px] uppercase tracking-widest text-zinc-500">
-                or
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <Button
-                variant="outline"
-                className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
-                onClick={() => supabase.auth.signInWithOAuth({ provider: 'github' })}
-              >
-                <Code2 className="h-4 w-4 mr-2" />
-                GitHub
+              <Button className="w-full h-10 rounded-lg bg-zinc-50 text-zinc-900 hover:bg-zinc-200 font-semibold">
+                Create Account
               </Button>
-              <Button
-                variant="outline"
-                className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
-                onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}
-              >
-                <Globe className="h-4 w-4 mr-2" />
-                Google
-              </Button>
-            </div>
-          </CardContent>
 
-          <CardFooter className="flex items-center justify-center text-sm text-zinc-400">
-            Don’t have an account?
-            <a className="ml-1 text-zinc-200 hover:underline" href="#">
-              Create one
-            </a>
-          </CardFooter>
-        </Card>
+              <div className="relative">
+                <Separator className="bg-zinc-800" />
+                <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-zinc-900/70 px-2 text-[11px] uppercase tracking-widest text-zinc-500">
+                  or
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  variant="outline"
+                  className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
+                  onClick={() => supabase.auth.signInWithOAuth({ provider: 'github' })}
+                >
+                  <Code2 className="h-4 w-4 mr-2" />
+                  GitHub
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
+                  onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}
+                >
+                  <Globe className="h-4 w-4 mr-2" />
+                  Google
+                </Button>
+              </div>
+            </CardContent>
+
+            <CardFooter className="flex items-center justify-center text-sm text-zinc-400">
+              Already have an account?
+              <button
+                onClick={() => { setIsRegister(false); setShowPassword(false); }}
+                className="ml-1 text-zinc-200 hover:underline bg-transparent border-none p-0 text-sm cursor-pointer font-normal"
+              >
+                Sign in
+              </button>
+            </CardFooter>
+          </Card>
+        )}
       </div>
     </section>
   );
