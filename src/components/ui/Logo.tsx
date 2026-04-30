@@ -1,6 +1,6 @@
 import React from 'react';
 
-import logoImg from '../assets/logo.png';
+import logoImg from '../../assets/logo.png';
 
 export const Logo = ({ size = 24, className = "" }: { size?: number, className?: string }) => {
   return (
