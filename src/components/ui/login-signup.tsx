@@ -18,11 +18,11 @@ import { Separator } from "@/components/ui/separator";
 import {
   Eye,
   EyeOff,
-  Github,
+  Code2,
   Lock,
   Mail,
   ArrowRight,
-  Chrome,
+  Globe,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -244,7 +244,7 @@ export default function LoginCardSection() {
                 className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
                 onClick={() => supabase.auth.signInWithOAuth({ provider: 'github' })}
               >
-                <Github className="h-4 w-4 mr-2" />
+                <Code2 className="h-4 w-4 mr-2" />
                 GitHub
               </Button>
               <Button
@@ -252,7 +252,7 @@ export default function LoginCardSection() {
                 className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
                 onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}
               >
-                <Chrome className="h-4 w-4 mr-2" />
+                <Globe className="h-4 w-4 mr-2" />
                 Google
               </Button>
             </div>
