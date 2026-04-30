@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2, Mic, MicOff } from 'lucide-react';
 import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
+import LandingPage from './components/ui/LandingPage';
 import LoginCardSection from './components/ui/login-signup';
 import { GooeyLoader } from './components/ui/loader-10';
 import { Logo } from './components/ui/Logo';
@@ -26,6 +27,7 @@ function App() {
   const [isListening, setIsListening] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [uiSpecifics, setUiSpecifics] = useState('');
+  const [showAuthModal, setShowAuthModal] = useState(false);
   
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -289,7 +291,19 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
           <div className="loading-spinner"></div>
         </div>
       ) : !user ? (
-        <LoginCardSection />
+        showAuthModal ? (
+           <div className="relative">
+             <button 
+               onClick={() => setShowAuthModal(false)} 
+               className="absolute top-6 left-6 z-50 text-zinc-400 hover:text-white flex items-center gap-2 transition-colors"
+             >
+               &larr; Back
+             </button>
+             <LoginCardSection />
+           </div>
+        ) : (
+           <LandingPage onAuthClick={() => setShowAuthModal(true)} />
+        )
       ) : (
       <div className="app-container">
         <aside className="sidebar glass-panel animate-fade-in">
