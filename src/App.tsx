@@ -293,9 +293,9 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
       ) : (
       <div className="app-container">
         <aside className="sidebar glass-panel animate-fade-in">
-          <div className="logo" onClick={resetApp} style={{cursor: 'pointer', gap: '16px'}}>
-            <Logo size={36} className="text-primary" />
-            <span style={{fontSize: '24px', fontWeight: 'bold'}}>PromptOrb</span>
+          <div className="logo" onClick={resetApp} style={{cursor: 'pointer', gap: '20px', marginBottom: '32px'}}>
+            <Logo size={54} className="text-primary" />
+            <span style={{fontSize: '28px', fontWeight: '800', letterSpacing: '-0.02em'}}>PromptOrb</span>
           </div>
           <nav className="sidebar-nav">
             <button className={`nav-item ${activeTab === 'generate' ? 'active' : ''}`} onClick={() => setActiveTab('generate')}><Sparkles size={18} /> Architect</button>
