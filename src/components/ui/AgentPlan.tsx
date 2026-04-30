@@ -119,18 +119,25 @@ export default function AgentPlan({ tasks: initialTasks = [] }: { tasks: Task[] 
                 return (
                   <motion.li key={task.id} initial="hidden" animate="visible" variants={taskVariants} className="overflow-hidden">
                     <motion.div 
-                      className={`flex items-center px-4 py-3 rounded-xl transition-all cursor-pointer border ${isExpanded ? 'bg-primary/5 border-primary/20' : 'bg-white/5 border-transparent hover:bg-white/10'}`}
+                      className={`flex items-center px-4 py-3 rounded-xl transition-all cursor-pointer border ${isExpanded ? 'bg-zinc-800/40 border-zinc-700/50 shadow-lg' : 'bg-zinc-900/40 border-transparent hover:border-zinc-800 hover:bg-zinc-800/20'}`}
                       onClick={() => toggleTaskExpansion(task.id)}
                     >
                       <div className="mr-3 flex-shrink-0" onClick={(e) => { e.stopPropagation(); toggleTaskStatus(task.id); }}>
-                        {task.status === "completed" ? <CheckCircle2 className="h-5 w-5 text-green-500" /> : 
-                         task.status === "in-progress" ? <CircleDotDashed className="h-5 w-5 text-primary animate-spin-slow" /> :
-                         task.status === "need-help" ? <CircleAlert className="h-5 w-5 text-yellow-500" /> :
-                         <Circle className="text-muted h-5 w-5" />}
+                        {task.status === "completed" ? (
+                          <div className="bg-green-500/20 rounded-full p-0.5">
+                            <CheckCircle2 className="h-5 w-5 text-green-500" />
+                          </div>
+                        ) : task.status === "in-progress" ? (
+                          <CircleDotDashed className="h-5 w-5 text-zinc-100 animate-spin-slow" />
+                        ) : task.status === "need-help" ? (
+                          <CircleAlert className="h-5 w-5 text-yellow-500" />
+                        ) : (
+                          <Circle className="text-zinc-600 h-5 w-5 group-hover:text-zinc-400" />
+                        )}
                       </div>
 
                       <div className="flex-grow min-w-0">
-                        <span className={`block font-medium truncate ${isCompleted ? "text-muted line-through" : "text-main"}`}>
+                        <span className={`block font-medium truncate ${isCompleted ? "text-zinc-500 line-through" : "text-zinc-100"}`}>
                           {task.title}
                         </span>
                       </div>
@@ -138,33 +145,45 @@ export default function AgentPlan({ tasks: initialTasks = [] }: { tasks: Task[] 
                       <div className="flex items-center gap-3 ml-4">
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
                           task.status === "completed" ? "bg-green-500/20 text-green-400" :
-                          task.status === "in-progress" ? "bg-primary/20 text-primary" :
-                          "bg-white/10 text-muted"
+                          task.status === "in-progress" ? "bg-zinc-100/10 text-zinc-100 border border-zinc-100/20" :
+                          "bg-zinc-800/50 text-zinc-500 border border-zinc-800"
                         }`}>
                           {task.status}
                         </span>
-                        {isExpanded ? <ChevronDown size={16} className="text-muted" /> : <ChevronRight size={16} className="text-muted" />}
+                        {isExpanded ? <ChevronDown size={16} className="text-zinc-500" /> : <ChevronRight size={16} className="text-zinc-500" />}
                       </div>
                     </motion.div>
 
                     <AnimatePresence>
                       {isExpanded && (
-                        <motion.div variants={subtaskListVariants} initial="hidden" animate="visible" exit="hidden" className="ml-9 mt-2 pl-4 border-l border-border/50">
-                          <ul className="space-y-2 py-2">
+                        <motion.div variants={subtaskListVariants} initial="hidden" animate="visible" exit="hidden" className="ml-9 mt-2 pl-4 border-l-2 border-zinc-800/50">
+                          <ul className="space-y-4 py-2">
                             {task.subtasks.map((subtask) => (
-                              <motion.li key={subtask.id} className="group flex flex-col">
-                                <div className="flex items-center gap-3 py-1 hover:translate-x-1 transition-transform" onClick={() => toggleSubtaskStatus(task.id, subtask.id)}>
-                                  <div className="flex-shrink-0 cursor-pointer">
-                                    {subtask.status === "completed" ? <CheckCircle2 className="h-4 w-4 text-green-500" /> : <Circle className="text-muted h-4 w-4" />}
+                              <motion.li key={subtask.id} className="group flex flex-col cursor-pointer" onClick={() => toggleSubtaskStatus(task.id, subtask.id)}>
+                                <div className="flex items-start gap-3 py-1 group-hover:translate-x-1 transition-transform">
+                                  <div className="mt-0.5 flex-shrink-0">
+                                    {subtask.status === "completed" ? (
+                                      <CheckCircle2 className="h-4 w-4 text-green-500" />
+                                    ) : (
+                                      <div className="h-4 w-4 rounded-full border-2 border-zinc-600 group-hover:border-zinc-400 transition-colors" />
+                                    )}
                                   </div>
-                                  <span className={`text-sm ${subtask.status === "completed" ? "text-muted line-through" : "text-main"}`}>
-                                    {subtask.title}
-                                  </span>
+                                  <div className="flex flex-col gap-1">
+                                    <span className={`text-sm font-medium leading-none ${subtask.status === "completed" ? "text-zinc-500 line-through" : "text-zinc-200"}`}>
+                                      {subtask.title}
+                                    </span>
+                                    <p className={`text-xs ${subtask.status === "completed" ? "text-zinc-600" : "text-zinc-400"}`}>
+                                      {subtask.description}
+                                    </p>
+                                  </div>
                                 </div>
-                                <p className="text-xs text-muted pl-7 mb-2">{subtask.description}</p>
                                 {subtask.tools && subtask.tools.length > 0 && (
-                                  <div className="flex flex-wrap gap-1 pl-7 mb-2">
-                                    {subtask.tools.map(tool => <span key={tool} className="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded text-muted">{tool}</span>)}
+                                  <div className="flex flex-wrap gap-1 pl-7 mt-1">
+                                    {subtask.tools.map(tool => (
+                                      <span key={tool} className="text-[9px] bg-zinc-800/50 border border-zinc-700/50 px-2 py-0.5 rounded text-zinc-500 uppercase font-bold tracking-tighter">
+                                        {tool}
+                                      </span>
+                                    ))}
                                   </div>
                                 )}
                               </motion.li>
