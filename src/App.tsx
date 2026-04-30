@@ -3,7 +3,7 @@ import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, 
 import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
 import LoginCardSection from './components/ui/login-signup';
-import { Loader3 } from './components/ui/loader-3';
+import { GooeyLoader } from './components/ui/loader-10';
 import { supabase } from './lib/supabase';
 import './App.css';
 
@@ -346,7 +346,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                     backdropFilter: 'blur(12px)',
                     gap: '40px'
                   }}>
-                    <Loader3 />
+                    <GooeyLoader />
                     <div style={{textAlign: 'center'}}>
                       <h2 style={{fontSize: '28px', color: 'var(--text-main)', marginBottom: '8px'}}>Synthesizing Architecture</h2>
                       <p style={{color: 'var(--text-muted)'}}>Aligning frontend and backend blueprints...</p>
