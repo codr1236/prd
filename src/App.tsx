@@ -3,6 +3,7 @@ import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, 
 import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
 import LoginCardSection from './components/ui/login-signup';
+import { Loader3 } from './components/ui/loader-3';
 import { supabase } from './lib/supabase';
 import './App.css';
 
@@ -331,6 +332,27 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                     </button>
                   )}
                 </header>
+
+                {isGenerating && (
+                  <div className="loading-overlay animate-fade-in" style={{
+                    position: 'fixed',
+                    inset: 0,
+                    zIndex: 1000,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'rgba(9, 9, 11, 0.8)',
+                    backdropFilter: 'blur(12px)',
+                    gap: '40px'
+                  }}>
+                    <Loader3 />
+                    <div style={{textAlign: 'center'}}>
+                      <h2 style={{fontSize: '28px', color: 'var(--text-main)', marginBottom: '8px'}}>Synthesizing Architecture</h2>
+                      <p style={{color: 'var(--text-muted)'}}>Aligning frontend and backend blueprints...</p>
+                    </div>
+                  </div>
+                )}
 
                 {showInput && (
                   <section className="input-section animate-fade-in delay-3">

@@ -303,7 +303,127 @@
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
+/* ============================================
+   Custom Box Stacking Loader
+   ============================================ */
+.loader-container {
+  --duration: 3s;
+  --clr: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 600px;
+}
+
+.loader {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-30deg) rotateY(45deg);
+}
+
+.loader .box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  transform-style: preserve-3d;
+  animation: var(--duration) linear infinite;
+}
+
+.loader .box > div {
+  --x: 0px;
+  --y: 0px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: var(--clr);
+  top: 0;
+  left: 0;
+  transform: translateZ(16px);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+.loader .box0 { --x: -32px; --y: 0; animation-name: box-move0; }
+.loader .box1 { --x: 32px; --y: 0; animation-name: box-move1; }
+.loader .box2 { --x: 0; --y: 32px; animation-name: box-move2; }
+.loader .box3 { --x: 0; --y: -32px; animation-name: box-move3; }
+.loader .box4 { --x: -32px; --y: -32px; animation-name: box-move4; }
+.loader .box5 { --x: 32px; --y: -32px; animation-name: box-move5; }
+.loader .box6 { --x: -32px; --y: 32px; animation-name: box-move6; }
+.loader .box7 { --x: 32px; --y: 32px; animation-name: box-move7; }
+
+.loader .ground {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 96px;
+  height: 96px;
+  transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(0);
+  background: rgba(255, 255, 255, 0.1);
+  animation: ground var(--duration) linear infinite;
+}
+
+@keyframes box-move0 {
+  12% { transform: translate(var(--x), var(--y)); }
+  25%, 52% { transform: translate(0, 0); }
+  80% { transform: translate(0, -32px); }
+  90%, 100% { transform: translate(0, 188px); }
+}
+
+@keyframes box-move1 {
+  16% { transform: translate(var(--x), var(--y)); }
+  29%, 52% { transform: translate(0, 0); }
+  80% { transform: translate(0, -32px); }
+  90%, 100% { transform: translate(0, 188px); }
+}
+
+@keyframes box-move2 {
+  20% { transform: translate(var(--x), var(--y)); }
+  33%, 52% { transform: translate(0, 0); }
+  80% { transform: translate(0, -32px); }
+  90%, 100% { transform: translate(0, 188px); }
+}
+
+@keyframes box-move3 {
+  24% { transform: translate(var(--x), var(--y)); }
+  37%, 52% { transform: translate(0, 0); }
+  80% { transform: translate(0, -32px); }
+  90%, 100% { transform: translate(0, 188px); }
+}
+
+@keyframes box-move4 {
+  28% { transform: translate(var(--x), var(--y)); }
+  41%, 52% { transform: translate(0, 0); }
+  80% { transform: translate(0, -32px); }
+  90%, 100% { transform: translate(0, 188px); }
+}
+
+@keyframes box-move5 {
+  32% { transform: translate(var(--x), var(--y)); }
+  45%, 52% { transform: translate(0, 0); }
+  80% { transform: translate(0, -32px); }
+  90%, 100% { transform: translate(0, 188px); }
+}
+
+@keyframes box-move6 {
+  36% { transform: translate(var(--x), var(--y)); }
+  49%, 52% { transform: translate(0, 0); }
+  80% { transform: translate(0, -32px); }
+  90%, 100% { transform: translate(0, 188px); }
+}
+
+@keyframes box-move7 {
+  40% { transform: translate(var(--x), var(--y)); }
+  53%, 52% { transform: translate(0, 0); }
+  80% { transform: translate(0, -32px); }
+  90%, 100% { transform: translate(0, 188px); }
+}
+
+@keyframes ground {
+  0%, 65% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(0); }
+  75%, 90% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(1); }
+  100% { transform: rotateX(90deg) rotateY(0deg) translate(-48px, -120px) translateZ(100px) scale(0); }
 }
