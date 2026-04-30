@@ -13,9 +13,24 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 
-export default function AgentPlan({ tasks: initialTasks = [] }) {
-  const [tasks, setTasks] = useState(initialTasks);
-  const [expandedTasks, setExpandedTasks] = useState(initialTasks.length > 0 ? [initialTasks[0].id] : []);
+interface Subtask {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  tools?: string[];
+}
+
+interface Task {
+  id: string;
+  title: string;
+  status: string;
+  subtasks: Subtask[];
+}
+
+export default function AgentPlan({ tasks: initialTasks = [] }: { tasks: Task[] }) {
+  const [tasks, setTasks] = useState<Task[]>(initialTasks);
+  const [expandedTasks, setExpandedTasks] = useState<string[]>(initialTasks.length > 0 ? [initialTasks[0].id] : []);
 
   // Sync tasks when prop changes
   useEffect(() => {

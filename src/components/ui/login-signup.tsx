@@ -24,11 +24,12 @@ import {
   ArrowRight,
   Chrome,
 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 export default function LoginCardSection() {
   const [showPassword, setShowPassword] = useState(false);
 
-  const canvasRef = useRef(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
@@ -40,7 +41,8 @@ export default function LoginCardSection() {
     };
     setSize();
 
-    let ps = [];
+    type P = { x: number; y: number; v: number; o: number };
+    let ps: P[] = [];
     let raf = 0;
 
     const make = () => ({
@@ -159,7 +161,7 @@ export default function LoginCardSection() {
 
       {/* Centered Login Card */}
       <div className="h-full w-full grid place-items-center px-4">
-        <Card className="card-animate w-full max-w-sm border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60">
+        <Card className="card-animate w-full max-sm:px-0 border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60 max-w-sm">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl">Welcome back</CardTitle>
             <CardDescription className="text-zinc-400">
@@ -240,6 +242,7 @@ export default function LoginCardSection() {
               <Button
                 variant="outline"
                 className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
+                onClick={() => supabase.auth.signInWithOAuth({ provider: 'github' })}
               >
                 <Github className="h-4 w-4 mr-2" />
                 GitHub
@@ -247,6 +250,7 @@ export default function LoginCardSection() {
               <Button
                 variant="outline"
                 className="h-10 rounded-lg border-zinc-800 bg-zinc-950 text-zinc-50 hover:bg-zinc-900/80"
+                onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}
               >
                 <Chrome className="h-4 w-4 mr-2" />
                 Google

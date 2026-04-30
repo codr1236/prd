@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2 } from 'lucide-react';
 import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
+import LoginCardSection from './components/ui/login-signup';
 import { supabase } from './lib/supabase';
 import './App.css';
 
@@ -10,7 +11,7 @@ const MISTRAL_KEY = 'tqd3sZ8qnPrf95jfJ68UihEeALoXcKbQ';
 function App() {
   const [idea, setIdea] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [prd, setPrd] = useState(null);
+  const [prd, setPrd] = useState<any>(null);
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('generate');
   const [outputTab, setOutputTab] = useState('roadmap');
@@ -18,9 +19,9 @@ function App() {
   const [showExportMenu, setShowExportMenu] = useState(false);
   const [projectType, setProjectType] = useState('Web Application');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<any>(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [uiSpecifics, setUiSpecifics] = useState('');
   
   useEffect(() => {
@@ -261,37 +262,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
           <div className="loading-spinner"></div>
         </div>
       ) : !user ? (
-        <div style={{height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 10}}>
-          <div className="glass-panel animate-fade-in" style={{padding: '60px 40px', maxWidth: '400px', width: '100%', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '32px'}}>
-            <div>
-              <div className="logo-icon-wrapper" style={{margin: '0 auto 24px auto', width: '64px', height: '64px'}}>
-                <Zap size={32} color="white" />
-              </div>
-              <h1 style={{fontSize: '32px', marginBottom: '8px', color: 'var(--text-main)'}}>VibePRD</h1>
-              <p className="subtitle">Sign in to sync your architectures</p>
-            </div>
-            
-            <div style={{display: 'flex', flexDirection: 'column', gap: '12px'}}>
-              <button 
-                className="btn-primary" 
-                style={{padding: '16px', display: 'flex', justifyContent: 'center', gap: '12px'}}
-                onClick={() => supabase.auth.signInWithOAuth({ provider: 'google' })}
-              >
-                <Globe size={20} />
-                Continue with Google
-              </button>
-              
-              <button 
-                className="btn-secondary" 
-                style={{padding: '16px', display: 'flex', justifyContent: 'center', gap: '12px', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-light)'}}
-                onClick={() => supabase.auth.signInWithOAuth({ provider: 'github' })}
-              >
-                <Code size={20} />
-                Continue with GitHub
-              </button>
-            </div>
-          </div>
-        </div>
+        <LoginCardSection />
       ) : (
       <div className="app-container">
         <aside className="sidebar glass-panel animate-fade-in">
