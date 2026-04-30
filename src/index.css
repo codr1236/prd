@@ -6,32 +6,32 @@
 
 @layer base {
   :root {
-    /* Premium Dark Theme */
-    --bg-base: #030014;
-    --bg-surface: rgba(15, 15, 25, 0.4);
-    --bg-surface-hover: rgba(25, 25, 35, 0.5);
+    /* Zinc Dark Theme — matches login page */
+    --bg-base: #09090b;           /* zinc-950 */
+    --bg-surface: rgba(24, 24, 27, 0.7);  /* zinc-900 */
+    --bg-surface-hover: rgba(39, 39, 42, 0.5); /* zinc-800 */
     
-    --primary: #8B5CF6; /* Violet */
-    --primary-glow: rgba(139, 92, 246, 0.5);
-    --secondary: #3B82F6; /* Blue */
-    --secondary-glow: rgba(59, 130, 246, 0.5);
-    --accent: #EC4899; /* Pink */
+    --primary: #fafafa;           /* zinc-50 — clean white accent */
+    --primary-glow: rgba(250, 250, 250, 0.15);
+    --secondary: #a1a1aa;         /* zinc-400 */
+    --secondary-glow: rgba(161, 161, 170, 0.2);
+    --accent: #e4e4e7;            /* zinc-200 */
     
-    --text-main: #F8FAFC;
-    --text-muted: #94A3B8;
-    --text-dark: #0F172A;
+    --text-main: #fafafa;         /* zinc-50 */
+    --text-muted: #a1a1aa;        /* zinc-400 */
+    --text-dark: #09090b;         /* zinc-950 */
     
-    --border-light: rgba(255, 255, 255, 0.08);
-    --border-color: rgba(255, 255, 255, 0.08);
-    --border-focus: rgba(139, 92, 246, 0.5);
+    --border-light: rgba(63, 63, 70, 0.5); /* zinc-700 */
+    --border-color: rgba(63, 63, 70, 0.5);
+    --border-focus: rgba(250, 250, 250, 0.3);
     
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-heading: 'Outfit', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     
     --glass-blur: blur(20px);
-    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    --glass-border: 1px solid var(--border-light);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    --glass-border: 1px solid rgba(63, 63, 70, 0.5);
     
     --transition-fast: 0.15s ease-out;
     --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -118,7 +118,7 @@
   left: -10%;
   width: 50vw;
   height: 50vw;
-  background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(39, 39, 42, 0.5) 0%, transparent 70%);
   animation-delay: 0s;
 }
 
@@ -127,7 +127,7 @@
   right: -10%;
   width: 60vw;
   height: 60vw;
-  background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(63, 63, 70, 0.3) 0%, transparent 70%);
   animation-delay: -5s;
 }
 
@@ -136,7 +136,7 @@
   left: 40%;
   width: 40vw;
   height: 40vw;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(82, 82, 91, 0.15) 0%, transparent 70%);
   animation-delay: -10s;
 }
 
@@ -178,9 +178,9 @@
 .glass-panel:hover {
   transform: translateY(-4px);
   box-shadow: 
-    0 12px 40px -8px rgba(0, 0, 0, 0.4),
-    0 0 20px -4px var(--primary-glow),
-    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    0 12px 40px -8px rgba(0, 0, 0, 0.6),
+    0 0 20px -4px rgba(63, 63, 70, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
 
 /* Scoped button styles for the dashboard only */
@@ -202,11 +202,11 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  color: white;
+  background: #fafafa;
+  color: #09090b;
   box-shadow: 
     0 0 0 1px rgba(255,255,255,0.1) inset,
-    0 4px 12px rgba(139, 92, 246, 0.3);
+    0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .btn-primary::after {
@@ -221,10 +221,10 @@
 
 .btn-primary:hover {
   transform: translateY(-2px) scale(1.02);
+  background: #e4e4e7;
   box-shadow: 
     0 0 0 1px rgba(255,255,255,0.2) inset,
-    0 8px 24px rgba(139, 92, 246, 0.5),
-    0 0 20px var(--primary-glow);
+    0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .btn-primary:hover::after {
@@ -261,7 +261,7 @@
 
 .app-container select {
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238B5CF6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 16px center;
   background-size: 16px;
@@ -281,10 +281,10 @@
 .app-container select:focus {
   outline: none;
   background: rgba(0, 0, 0, 0.4);
-  border-color: var(--primary);
+  border-color: #71717a;
   box-shadow: 
     inset 0 2px 4px rgba(0,0,0,0.2),
-    0 0 0 4px rgba(139, 92, 246, 0.15);
+    0 0 0 4px rgba(113, 113, 122, 0.15);
 }
 
 .app-container input::placeholder,
