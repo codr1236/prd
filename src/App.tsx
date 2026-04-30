@@ -4,6 +4,7 @@ import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
 import LoginCardSection from './components/ui/login-signup';
 import { GooeyLoader } from './components/ui/loader-10';
+import { Logo } from './components/ui/Logo';
 import { supabase } from './lib/supabase';
 import './App.css';
 
@@ -293,10 +294,10 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
       <div className="app-container">
         <aside className="sidebar glass-panel animate-fade-in">
           <div className="logo" onClick={resetApp} style={{cursor: 'pointer'}}>
-            <div className="logo-icon-wrapper">
-              <Zap size={24} color="white" />
+            <div className="logo-icon-wrapper" style={{background: 'var(--primary)', color: 'var(--bg-base)'}}>
+              <Logo size={20} />
             </div>
-            <span>VibePRD</span>
+            <span>PromptOrb</span>
           </div>
           <nav className="sidebar-nav">
             <button className={`nav-item ${activeTab === 'generate' ? 'active' : ''}`} onClick={() => setActiveTab('generate')}><Sparkles size={18} /> Architect</button>
@@ -324,7 +325,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
               <>
                 <header className="main-header animate-fade-in delay-2">
                   <div className="badge"><Wand2 size={14} /> Mistral Large Architect</div>
-                  <h1>{prd ? 'Architectural' : 'Build your'} <span className="text-gradient">{prd ? 'Masterpiece' : 'next vision'}</span></h1>
+                  <h1>{prd ? 'Architectural' : 'Build your'} <span className="text-gradient">{prd ? 'Masterpiece' : 'next prompt'}</span></h1>
                   <p className="subtitle">{prd ? `Blueprint for ${prd.title}` : 'Synchronized blueprints. Full-stack mastery.'}</p>
                   {prd && (
                     <button className="btn-secondary" style={{marginTop: '24px'}} onClick={resetApp}>

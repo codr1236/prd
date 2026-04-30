@@ -24,9 +24,9 @@ import {
   ArrowRight,
   Globe,
   User,
-  Zap,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { Logo } from "./Logo";
 
 export default function LoginCardSection() {
   const [showPassword, setShowPassword] = useState(false);
@@ -146,10 +146,10 @@ export default function LoginCardSection() {
 
       {/* Header */}
       <header className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-zinc-800/80">
-        <div className="flex items-center gap-2">
-          <Zap className="h-4 w-4 text-zinc-300" />
-          <span className="text-xs tracking-[0.14em] uppercase text-zinc-400 font-medium">
-            VibePRD
+        <div className="flex items-center gap-3">
+          <Logo size={20} className="text-zinc-50" />
+          <span className="text-xs tracking-[0.14em] uppercase text-zinc-100 font-bold">
+            PromptOrb
           </span>
         </div>
         <Button
@@ -166,11 +166,18 @@ export default function LoginCardSection() {
         {!isRegister ? (
           /* ===== LOGIN CARD ===== */
           <Card className="card-animate w-full max-w-sm border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Welcome back</CardTitle>
-              <CardDescription className="text-zinc-400">
-                Sign in to your account
-              </CardDescription>
+            <CardHeader className="space-y-4 text-center">
+              <div className="flex justify-center">
+                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-white/5 border border-white/10">
+                  <Logo size={40} className="text-zinc-950" />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <CardTitle className="text-2xl">PromptOrb</CardTitle>
+                <CardDescription className="text-zinc-400">
+                  Welcome back, Architect
+                </CardDescription>
+              </div>
             </CardHeader>
 
             <CardContent className="grid gap-5">
@@ -282,11 +289,18 @@ export default function LoginCardSection() {
         ) : (
           /* ===== REGISTER CARD ===== */
           <Card className="card-animate w-full max-w-sm border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Create an account</CardTitle>
-              <CardDescription className="text-zinc-400">
-                Get started with VibePRD
-              </CardDescription>
+            <CardHeader className="space-y-4 text-center">
+              <div className="flex justify-center">
+                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-white/5 border border-white/10">
+                  <Logo size={40} className="text-zinc-950" />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <CardTitle className="text-2xl">PromptOrb</CardTitle>
+                <CardDescription className="text-zinc-400">
+                  Join the Architect Guild
+                </CardDescription>
+              </div>
             </CardHeader>
 
             <CardContent className="grid gap-5">
