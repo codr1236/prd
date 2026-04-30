@@ -1,6 +1,5 @@
-// VibePRD Application - Production Build Trigger
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2 } from 'lucide-react';
+import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2, Mic, MicOff } from 'lucide-react';
 import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
 import LoginCardSection from './components/ui/login-signup';
@@ -22,6 +21,7 @@ function App() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
+  const [isListening, setIsListening] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [uiSpecifics, setUiSpecifics] = useState('');
   
@@ -233,6 +233,30 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
     `;
   };
 
+  const startListening = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported in this browser.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setIdea((prev) => prev ? `${prev} ${transcript}` : transcript);
+    };
+
+    recognition.start();
+  };
+
   const loadFromHistory = (item) => {
     if (!item || !item.frontend || !item.backend) return;
     setPrd(item);
@@ -343,7 +367,30 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                       </div>
 
                       <div className="input-group">
-                        <label><Target size={16} /> Core Vision</label>
+                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px'}}>
+                          <label style={{marginBottom: 0}}><Target size={16} /> Core Vision</label>
+                          <button 
+                            className={`mic-btn ${isListening ? 'active' : ''}`}
+                            onClick={startListening}
+                            title="Speak your vision"
+                            style={{
+                              background: isListening ? 'rgba(239, 68, 68, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                              border: `1px solid ${isListening ? 'rgba(239, 68, 68, 0.3)' : 'rgba(255, 255, 255, 0.1)'}`,
+                              color: isListening ? '#ef4444' : 'var(--text-muted)',
+                              padding: '4px 8px',
+                              borderRadius: '8px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '6px',
+                              fontSize: '11px',
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease'
+                            }}
+                          >
+                            {isListening ? <MicOff size={14} className="animate-pulse" /> : <Mic size={14} />}
+                            {isListening ? 'Listening...' : 'Talk'}
+                          </button>
+                        </div>
                         <textarea 
                           placeholder="Describe your core idea (e.g., An AI playlist curator for Spotify)..." 
                           value={idea} 
