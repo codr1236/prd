@@ -1,21 +1,19 @@
 import React from 'react';
 
+import logoImg from '../assets/logo.png';
+
 export const Logo = ({ size = 24, className = "" }: { size?: number, className?: string }) => {
   return (
-    <svg 
+    <img 
+      src={logoImg} 
+      alt="PromptOrb Logo" 
       width={size} 
-      height={size} 
-      viewBox="0 0 100 100" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg"
+      height={size}
       className={className}
-    >
-      <path 
-        fillRule="evenodd" 
-        clipRule="evenodd" 
-        d="M20 75C20 45 40 25 70 25C90 25 90 45 90 75H20ZM30 65C30 50 40 38 55 38C65 38 72 45 72 65H30Z" 
-        fill="currentColor" 
-      />
-    </svg>
+      style={{ 
+        filter: className.includes('text-zinc-950') ? 'none' : 'invert(1)',
+        objectFit: 'contain'
+      }}
+    />
   );
 };
