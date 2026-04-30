@@ -294,9 +294,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
       <div className="app-container">
         <aside className="sidebar glass-panel animate-fade-in">
           <div className="logo" onClick={resetApp} style={{cursor: 'pointer'}}>
-            <div className="logo-icon-wrapper" style={{background: 'var(--primary)', color: 'var(--bg-base)'}}>
-              <Logo size={20} />
-            </div>
+            <Logo size={24} className="text-primary" />
             <span>PromptOrb</span>
           </div>
           <nav className="sidebar-nav">

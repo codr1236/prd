@@ -167,10 +167,8 @@ export default function LoginCardSection() {
           /* ===== LOGIN CARD ===== */
           <Card className="card-animate w-full max-w-sm border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60">
             <CardHeader className="space-y-4 text-center">
-              <div className="flex justify-center">
-                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-white/5 border border-white/10">
-                  <Logo size={40} className="text-zinc-950" />
-                </div>
+              <div className="flex justify-center mb-2">
+                <Logo size={48} className="text-white" />
               </div>
               <div className="space-y-1">
                 <CardTitle className="text-2xl">PromptOrb</CardTitle>
@@ -290,10 +288,8 @@ export default function LoginCardSection() {
           /* ===== REGISTER CARD ===== */
           <Card className="card-animate w-full max-w-sm border-zinc-800 bg-zinc-900/70 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60">
             <CardHeader className="space-y-4 text-center">
-              <div className="flex justify-center">
-                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-lg shadow-white/5 border border-white/10">
-                  <Logo size={40} className="text-zinc-950" />
-                </div>
+              <div className="flex justify-center mb-2">
+                <Logo size={48} className="text-white" />
               </div>
               <div className="space-y-1">
                 <CardTitle className="text-2xl">PromptOrb</CardTitle>
