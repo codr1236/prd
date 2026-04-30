@@ -277,7 +277,6 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
             <button className={`nav-item ${activeTab === 'generate' ? 'active' : ''}`} onClick={() => setActiveTab('generate')}><Sparkles size={18} /> Architect</button>
             <button className={`nav-item ${activeTab === 'history' ? 'active' : ''}`} onClick={() => setActiveTab('history')}><History size={18} /> Repository</button>
             <button className={`nav-item ${activeTab === 'roadmaps' ? 'active' : ''}`} onClick={() => setActiveTab('roadmaps')}><Rocket size={18} /> Your Roadmaps</button>
-            <button className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}><Settings size={18} /> Config</button>
           </nav>
           <div className="sidebar-footer">
             <div className="user-info" onClick={() => setActiveTab('profile')}>
@@ -591,15 +590,6 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
               </div>
             )}
 
-            {activeTab === 'settings' && (
-              <div className="settings-panel animate-fade-in glass-panel" style={{padding: '60px', width: '100%', maxWidth: '800px'}}>
-                <h2 style={{fontSize: '36px', marginBottom: '16px'}}>Configuration</h2>
-                <p className="subtitle" style={{marginBottom: '48px'}}>Mistral Engine is permanently set.</p>
-                <div className="modal-actions">
-                  <button className="btn-primary" onClick={() => setActiveTab('generate')}>Back to Architect</button>
-                </div>
-              </div>
-            )}
 
             {activeTab === 'profile' && (
               <div className="profile-panel animate-fade-in glass-panel" style={{padding: '60px', width: '100%', maxWidth: '800px', display: 'flex', flexDirection: 'column', gap: '32px'}}>
