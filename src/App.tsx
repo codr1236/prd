@@ -274,7 +274,9 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
           </div>
           <nav className="sidebar-nav">
             <button className={`nav-item ${activeTab === 'generate' ? 'active' : ''}`} onClick={() => setActiveTab('generate')}><Sparkles size={18} /> Architect</button>
-            <button className={`nav-item ${activeTab === 'history' ? 'active' : ''}`} onClick={() => setActiveTab('history')}><Rocket size={18} /> Your Roadmaps</button>
+            <button className={`nav-item ${activeTab === 'history' ? 'active' : ''}`} onClick={() => setActiveTab('history')}><History size={18} /> Repository</button>
+            <button className={`nav-item ${activeTab === 'roadmaps' ? 'active' : ''}`} onClick={() => setActiveTab('roadmaps')}><Rocket size={18} /> Your Roadmaps</button>
+            <button className={`nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}><Settings size={18} /> Config</button>
           </nav>
           <div className="sidebar-footer">
             <div className="user-info" onClick={() => setActiveTab('profile')}>
@@ -528,7 +530,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
             {activeTab === 'history' && (
               <div className="history-section animate-fade-in" style={{width: '100%', maxWidth: '1000px'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px'}}>
-                  <h2 style={{fontSize: '36px', color: 'var(--text-main)'}}>Your Roadmaps</h2>
+                  <h2 style={{fontSize: '36px', color: 'var(--text-main)'}}>Project Repository</h2>
                   <button className="btn-secondary" onClick={async () => {
                     setHistory([]); 
                     localStorage.removeItem('vibe_history');
@@ -558,6 +560,43 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                     ))}
                   </div>
                 )}
+              </div>
+            )}
+
+            {activeTab === 'roadmaps' && (
+              <div className="history-section animate-fade-in" style={{width: '100%', maxWidth: '1000px'}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px'}}>
+                  <h2 style={{fontSize: '36px', color: 'var(--text-main)'}}>Your Roadmaps</h2>
+                </div>
+                {history.length === 0 ? (
+                  <div className="empty-state">
+                    <Rocket size={64} />
+                    <h3 style={{fontSize: '24px'}}>No Roadmaps Found</h3>
+                    <p>Generate an architecture first to see its roadmap here.</p>
+                  </div>
+                ) : (
+                  <div className="grid gap-8">
+                    {history.map((item, i) => (
+                      <div key={i} className="glass-panel p-8">
+                        <div className="flex items-center gap-4 mb-6 border-b border-zinc-800 pb-4">
+                          <Rocket className="text-zinc-400" size={24} />
+                          <h3 style={{fontSize: '24px', color: 'var(--text-main)'}}>{item.title}</h3>
+                        </div>
+                        <AgentPlan tasks={item.roadmap || []} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'settings' && (
+              <div className="settings-panel animate-fade-in glass-panel" style={{padding: '60px', width: '100%', maxWidth: '800px'}}>
+                <h2 style={{fontSize: '36px', marginBottom: '16px'}}>Configuration</h2>
+                <p className="subtitle" style={{marginBottom: '48px'}}>Mistral Engine is permanently set.</p>
+                <div className="modal-actions">
+                  <button className="btn-primary" onClick={() => setActiveTab('generate')}>Back to Architect</button>
+                </div>
               </div>
             )}
 
