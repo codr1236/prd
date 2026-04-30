@@ -1,3 +1,4 @@
+// VibePRD Application - Production Build Trigger
 import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2 } from 'lucide-react';
 import AgentPlan from './components/ui/AgentPlan';
