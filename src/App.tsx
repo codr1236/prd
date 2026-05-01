@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2, Mic, MicOff } from 'lucide-react';
+import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2, Mic, MicOff, Clock, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Button } from './components/ui/button';
 import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
 import LandingPage from './components/ui/LandingPage';
@@ -29,6 +29,8 @@ function App() {
   const [uiSpecifics, setUiSpecifics] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [usageCount, setUsageCount] = useState(0);
+  const [showLimitModal, setShowLimitModal] = useState(false);
+  const [timeLeft, setTimeLeft] = useState('');
   
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -100,6 +102,21 @@ function App() {
     
     fetchHistory();
     fetchUsage();
+
+    const timer = setInterval(() => {
+      const now = new Date();
+      const tomorrow = new Date();
+      tomorrow.setUTCHours(24, 0, 0, 0);
+      const diff = tomorrow.getTime() - now.getTime();
+      
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, [user]);
 
   const fetchUsage = async () => {
@@ -114,8 +131,10 @@ function App() {
       const today = new Date().toISOString().split('T')[0];
       if (data.last_reset_date === today) {
         setUsageCount(data.generation_count_today);
+        if (data.generation_count_today >= 5) setShowLimitModal(true);
       } else {
         setUsageCount(0);
+        setShowLimitModal(false);
       }
     }
   };
@@ -313,6 +332,39 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
 
   return (
     <>
+      {showLimitModal && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-zinc-950/80 backdrop-blur-md animate-fade-in">
+          <div className="max-w-md w-full bg-zinc-900 border border-zinc-800 rounded-[2.5rem] p-10 text-center shadow-2xl relative overflow-hidden">
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/20 blur-[60px] rounded-full" />
+            <div className="w-20 h-20 bg-zinc-800/50 rounded-2xl flex items-center justify-center mx-auto mb-8">
+              <Clock size={40} className="text-zinc-400" />
+            </div>
+            <h2 className="text-3xl font-bold mb-4 tracking-tighter">Daily limit reached</h2>
+            <p className="text-zinc-400 mb-8 leading-relaxed">You've reached your maximum of 5 PRDs for today. Your limit will reset in:</p>
+            
+            <div className="text-4xl font-mono font-bold text-white mb-10 tracking-widest bg-zinc-800/30 py-4 rounded-2xl border border-zinc-800">
+              {timeLeft}
+            </div>
+
+            <div className="space-y-4">
+              <button className="w-full py-4 rounded-2xl bg-white text-zinc-950 font-bold text-lg hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 group">
+                Upgrade to Pro <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </button>
+              <div className="flex items-center justify-center gap-2 text-sm text-zinc-500">
+                <ShieldCheck size={14} />
+                Just $1/month • Cancel anytime
+              </div>
+              <button 
+                onClick={() => setShowLimitModal(false)}
+                className="w-full py-3 text-zinc-500 hover:text-zinc-300 transition-colors text-sm font-medium"
+              >
+                Back to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="bg-mesh">
         <SparklesCore
           id="tsparticlesfullpage"
@@ -362,6 +414,20 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
             <button className={`nav-item ${activeTab === 'roadmaps' ? 'active' : ''}`} onClick={() => setActiveTab('roadmaps')}><Rocket size={18} /> Your Roadmaps</button>
           </nav>
           <div className="sidebar-footer">
+            <div style={{padding: '0 12px 16px 12px', borderBottom: '1px solid var(--border-light)', marginBottom: '16px'}}>
+              <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px'}}>
+                <span style={{fontSize: '11px', color: 'var(--text-muted)', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Daily Limit</span>
+                <span style={{fontSize: '11px', color: usageCount >= 5 ? '#ef4444' : 'var(--text-main)', fontWeight: '700'}}>{usageCount}/5</span>
+              </div>
+              <div style={{height: '4px', background: 'rgba(255,255,255,0.05)', borderRadius: '2px', overflow: 'hidden'}}>
+                <div style={{
+                  height: '100%', 
+                  width: `${(usageCount / 5) * 100}%`, 
+                  background: usageCount >= 5 ? '#ef4444' : 'var(--primary)',
+                  transition: 'width 0.5s ease'
+                }}></div>
+              </div>
+            </div>
             <div className="user-info" onClick={() => setActiveTab('profile')}>
               {user?.user_metadata?.avatar_url ? (
                 <img src={user.user_metadata.avatar_url} alt="Avatar" className="avatar" style={{width: '32px', height: '32px', borderRadius: '8px', padding: 0}} />
@@ -489,11 +555,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                         />
                       </div>
 
-                      <div className="input-actions" style={{justifyContent: 'space-between', alignItems: 'center', marginTop: '16px'}}>
-                        <div style={{display: 'flex', alignItems: 'center', gap: '8px', color: usageCount >= 5 ? '#ef4444' : 'var(--text-muted)', fontSize: '12px', fontWeight: '500'}}>
-                          <AlertTriangle size={14} className={usageCount >= 5 ? 'animate-pulse' : ''} />
-                          <span>Daily Limit: {usageCount}/5 PRDs generated</span>
-                        </div>
+                      <div className="input-actions" style={{justifyContent: 'flex-end', marginTop: '16px'}}>
                         <button className={`btn-primary ${isGenerating ? 'loading' : ''}`} onClick={handleGenerate} disabled={isGenerating || usageCount >= 5}>
                           {isGenerating ? 'Synthesizing Blueprint...' : <><Send size={18} /> Architect Vision</>}
                         </button>
