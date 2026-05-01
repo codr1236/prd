@@ -290,8 +290,19 @@ const PRDSection = () => (
 
 /* ─── Feature Grid ─── */
 const FeatureGrid = () => (
-  <section id="features" className="py-24 px-6 bg-zinc-950 border-t border-zinc-900/50">
-    <div className="max-w-7xl mx-auto">
+  <section id="features" className="py-24 px-6 bg-zinc-950 border-t border-zinc-900/50 relative overflow-hidden">
+    {/* Section Background Grid */}
+    <div 
+      className="absolute inset-0 pointer-events-none opacity-[0.03]"
+      style={{
+        backgroundImage: `linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)`,
+        backgroundSize: `48px 48px`,
+        maskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)',
+        WebkitMaskImage: 'radial-gradient(circle at center, black 40%, transparent 80%)'
+      }}
+    />
+
+    <div className="max-w-7xl mx-auto relative z-10">
       <FadeSection>
         <div className="text-center mb-20">
           <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 mb-4 tracking-tight">Technical Powerhouse</h2>
@@ -303,25 +314,28 @@ const FeatureGrid = () => (
           viewport={{ once: true, margin: "-100px" }}
           variants={{
             hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+            visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
           }}
-          className="grid grid-cols-1 divide-y divide-dashed divide-zinc-800/50 border-t border-b border-dashed border-zinc-800/50 sm:grid-cols-2 md:grid-cols-4 sm:divide-x sm:divide-y-0 sm:border-l sm:border-r"
+          className="grid md:grid-cols-4 gap-6"
         >
           {[
-            { title: "Architecture Synthesis", description: "Full-stack blueprints with granular checklists.", icon: Layers },
-            { title: "Voice-to-Text", description: "Hands-free project ideation in real-time.", icon: Mic },
-            { title: "Supabase Persistence", description: "Roadmaps saved to your personal repository.", icon: Database },
-            { title: "Gooey Synthesis", description: "Visualizing AI 'thinking' during roadmap generation.", icon: Zap },
+            { title: "Architecture Synthesis", desc: "Full-stack blueprints with granular checklists.", icon: <Layers className="text-zinc-100" /> },
+            { title: "Voice-to-Text", desc: "Hands-free project ideation in real-time.", icon: <Mic className="text-zinc-100" /> },
+            { title: "Supabase Persistence", desc: "Roadmaps saved to your personal repository.", icon: <Database className="text-zinc-100" /> },
+            { title: "Gooey Synthesis", desc: "Visualizing AI 'thinking' during roadmap generation.", icon: <Zap className="text-zinc-100" /> },
           ].map((f, i) => (
             <motion.div 
               key={i} 
               variants={{
-                hidden: { filter: 'blur(4px)', y: 20, opacity: 0 },
-                visible: { filter: 'blur(0px)', y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } }
+                hidden: { y: 30, opacity: 0, scale: 0.95 },
+                visible: { y: 0, opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } }
               }}
-              className="group border-zinc-800/50 sm:border-t-0"
+              whileHover={{ y: -5 }} 
+              className="group p-8 rounded-3xl bg-zinc-900/40 border border-zinc-800/50 hover:bg-zinc-900 hover:border-zinc-700/50 transition-all shadow-xl shadow-black/20"
             >
-              <FeatureCard feature={f} className="h-full bg-transparent border-0 rounded-none hover:bg-zinc-900/30 transition-all duration-500" />
+              <div className="w-12 h-12 rounded-2xl bg-zinc-100/10 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-zinc-100/20 transition-all duration-300">{f.icon}</div>
+              <h3 className="text-xl font-bold text-zinc-100 mb-3">{f.title}</h3>
+              <p className="text-zinc-500 text-sm leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </motion.div>
