@@ -401,8 +401,8 @@ export default function LandingPage({ onAuthClick }: { onAuthClick: () => void }
       <Navigation onAuthClick={onAuthClick} />
       <main>
         <Hero onAuthClick={onAuthClick} />
-        <VisualShowcase />
         <PRDSection />
+        <VisualShowcase />
         <FeatureGrid />
 
         <section className="py-24 px-6 relative bg-zinc-950 overflow-hidden">
@@ -411,7 +411,7 @@ export default function LandingPage({ onAuthClick }: { onAuthClick: () => void }
             <div className="max-w-3xl mx-auto rounded-[2rem] bg-white p-12 md:p-14 text-zinc-950 text-center relative overflow-hidden shadow-2xl">
               <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tighter">Ready to map your vision?</h2>
               <p className="text-zinc-500 text-base md:text-lg mb-8 max-w-md mx-auto font-medium">Join the elite architects building the next generation of masterpieces.</p>
-              <Button size="lg" className="rounded-xl px-8 py-5 text-lg bg-zinc-950 text-white hover:bg-zinc-900 shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all hover:scale-[1.02] active:scale-95 group" onClick={onAuthClick}>
+              <Button size="lg" className="rounded-xl px-10 py-6 text-xl bg-zinc-200 text-zinc-950 hover:bg-zinc-300 shadow-xl transition-all hover:scale-[1.02] active:scale-95 group font-bold" onClick={onAuthClick}>
                 Get Started for Free <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
