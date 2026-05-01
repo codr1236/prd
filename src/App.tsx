@@ -28,6 +28,7 @@ function App() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [uiSpecifics, setUiSpecifics] = useState('');
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [usageCount, setUsageCount] = useState(0);
   
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -98,7 +99,26 @@ function App() {
     };
     
     fetchHistory();
+    fetchUsage();
   }, [user]);
+
+  const fetchUsage = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from('user_usage')
+      .select('generation_count_today, last_reset_date')
+      .eq('user_id', user.id)
+      .single();
+    
+    if (data) {
+      const today = new Date().toISOString().split('T')[0];
+      if (data.last_reset_date === today) {
+        setUsageCount(data.generation_count_today);
+      } else {
+        setUsageCount(0);
+      }
+    }
+  };
 
   const loadLocalHistory = () => {
     try {
@@ -115,18 +135,18 @@ function App() {
     try {
       const { data: allowed, error: rateLimitError } = await supabase.rpc('check_and_increment_usage', {
         user_id_input: user.id,
-        max_per_day: 10 // Set your desired daily limit
+        max_per_day: 5 // Set your desired daily limit
       });
 
       if (rateLimitError) throw rateLimitError;
       if (!allowed) {
-        alert('Daily generation limit reached. Please come back tomorrow!');
+        alert('Daily generation limit reached (5/5). Please come back tomorrow!');
         setIsGenerating(false);
         return;
       }
+      fetchUsage(); // Refresh usage count
     } catch (err) {
       console.error('Rate limit check failed:', err);
-      // Fallback: allow generation if rate limit check fails to avoid blocking users
     }
 
     setPrd(null);
@@ -469,8 +489,12 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                         />
                       </div>
 
-                      <div className="input-actions" style={{justifyContent: 'flex-end', marginTop: '16px'}}>
-                        <button className={`btn-primary ${isGenerating ? 'loading' : ''}`} onClick={handleGenerate} disabled={isGenerating}>
+                      <div className="input-actions" style={{justifyContent: 'space-between', alignItems: 'center', marginTop: '16px'}}>
+                        <div style={{display: 'flex', alignItems: 'center', gap: '8px', color: usageCount >= 5 ? '#ef4444' : 'var(--text-muted)', fontSize: '12px', fontWeight: '500'}}>
+                          <AlertTriangle size={14} className={usageCount >= 5 ? 'animate-pulse' : ''} />
+                          <span>Daily Limit: {usageCount}/5 PRDs generated</span>
+                        </div>
+                        <button className={`btn-primary ${isGenerating ? 'loading' : ''}`} onClick={handleGenerate} disabled={isGenerating || usageCount >= 5}>
                           {isGenerating ? 'Synthesizing Blueprint...' : <><Send size={18} /> Architect Vision</>}
                         </button>
                       </div>
