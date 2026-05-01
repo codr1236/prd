@@ -19,6 +19,7 @@ import {
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Logo } from "./Logo";
 import { SparklesCore } from "./sparkles";
+import { FeatureCard } from "./grid-feature-cards";
 import dashboardPreview from "../../assets/dashboard-preview.png";
 
 /* ─── Custom SVG Icon ─── */
@@ -273,16 +274,12 @@ const PRDSection = () => (
               </div>
             </GlassCard>
             {[
-              { title: "Strategic Alignment", desc: "Every stakeholder understands the core 'Why' behind every feature.", icon: <Target className="text-zinc-100" /> },
-              { title: "Clarity & Scoping", desc: "Avoid 'Scope Creep' by defining explicit boundaries for a lean MVP.", icon: <ShieldCheck className="text-zinc-100" /> },
-              { title: "Accelerated Dev", desc: "Reducing ambiguity leads to faster code synthesis.", icon: <FastForward className="text-zinc-100" /> },
-              { title: "Technical Mastery", desc: "Synthesize roadmaps from PRDs in seconds.", icon: <Zap className="text-zinc-100" /> },
+              { title: "Strategic Alignment", description: "Every stakeholder understands the core 'Why' behind every feature.", icon: Target },
+              { title: "Clarity & Scoping", description: "Avoid 'Scope Creep' by defining explicit boundaries for a lean MVP.", icon: ShieldCheck },
+              { title: "Accelerated Dev", description: "Reducing ambiguity leads to faster code synthesis.", icon: FastForward },
+              { title: "Technical Mastery", description: "Synthesize roadmaps from PRDs in seconds.", icon: Zap },
             ].map((b, i) => (
-              <motion.div key={i} whileHover={{ y: -5 }} className="p-8 rounded-3xl bg-zinc-900/30 border border-zinc-800/50 hover:bg-zinc-900 transition-all">
-                <div className="w-12 h-12 rounded-2xl bg-zinc-800 flex items-center justify-center mb-6">{b.icon}</div>
-                <h4 className="text-xl font-bold text-zinc-100 mb-3">{b.title}</h4>
-                <p className="text-zinc-500 text-sm leading-relaxed">{b.desc}</p>
-              </motion.div>
+              <FeatureCard key={i} feature={b} className="bg-zinc-900/30 border-zinc-800/50 hover:bg-zinc-900 transition-all rounded-3xl" />
             ))}
           </div>
         </div>
