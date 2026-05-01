@@ -405,28 +405,35 @@ export default function LandingPage({ onAuthClick }: { onAuthClick: () => void }
         <PRDSection />
         <FeatureGrid />
 
-        <section className="py-32 px-6 relative border-t border-zinc-900/50">
+        <section className="py-48 px-6 relative bg-zinc-950 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)]" />
           <FadeSection>
-            <div className="max-w-5xl mx-auto rounded-[3rem] bg-white p-12 md:p-24 text-zinc-950 text-center relative overflow-hidden shadow-2xl">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-zinc-900/5 blur-[80px] rounded-full" />
-              <h2 className="text-5xl md:text-7xl font-bold mb-8 tracking-tighter">Ready to map your vision?</h2>
-              <p className="text-zinc-600 text-xl mb-12 max-w-xl mx-auto font-medium">Join the elite architects building the next generation of masterpieces.</p>
-              <Button size="lg" className="rounded-2xl px-12 py-8 text-2xl bg-zinc-950 text-white hover:bg-zinc-800 shadow-xl transition-all hover:scale-105 active:scale-95" onClick={onAuthClick}>Get Started for Free</Button>
+            <div className="max-w-5xl mx-auto rounded-[3.5rem] bg-white p-12 md:p-24 text-zinc-950 text-center relative overflow-hidden shadow-[0_0_100px_rgba(255,255,255,0.1)]">
+              <div className="absolute top-0 right-0 w-96 h-96 bg-zinc-950/[0.02] blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2" />
+              <h2 className="text-5xl md:text-8xl font-bold mb-8 tracking-tighter leading-[0.9]">Ready to map <br />your vision?</h2>
+              <p className="text-zinc-500 text-xl md:text-2xl mb-12 max-w-xl mx-auto font-medium tracking-tight">Join the elite architects building the next generation of masterpieces.</p>
+              <Button size="lg" className="rounded-2xl px-12 py-8 text-2xl bg-zinc-950 text-white hover:bg-zinc-900 shadow-2xl transition-all hover:scale-105 active:scale-95 group" onClick={onAuthClick}>
+                Get Started for Free <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
             </div>
           </FadeSection>
         </section>
       </main>
 
-      <footer className="bg-zinc-950 border-t border-zinc-900 pt-24 pb-12 px-6">
+      <footer className="bg-zinc-950 border-t border-zinc-900/50 py-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-3">
-            <Logo size={24} className="text-white" />
-            <span className="text-xl font-bold tracking-tighter text-white">PromptOrb</span>
+            <Logo size={20} className="text-white opacity-80" />
+            <span className="text-lg font-bold tracking-tighter text-white">PromptOrb</span>
           </div>
-          <p className="text-zinc-600 text-xs">© 2026 PromptOrb Architecture Studio. Built for the future of development.</p>
-          <div className="flex gap-4">
-            <Button variant="ghost" size="sm" className="p-2 bg-zinc-900 rounded-lg text-white hover:bg-zinc-800"><GithubIcon size={18} /></Button>
-            <Button variant="ghost" size="sm" className="p-2 bg-zinc-900 rounded-lg text-white hover:bg-zinc-800"><Sparkles size={18} /></Button>
+          <p className="text-zinc-600 text-[10px] uppercase tracking-[0.2em] font-bold">© 2026 PromptOrb Architecture Studio. All Rights Reserved.</p>
+          <div className="flex gap-2">
+            <Button variant="ghost" size="sm" className="w-10 h-10 p-0 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all">
+              <GithubIcon size={18} />
+            </Button>
+            <Button variant="ghost" size="sm" className="w-10 h-10 p-0 bg-zinc-900 border border-zinc-800 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all">
+              <Sparkles size={18} />
+            </Button>
           </div>
         </div>
       </footer>
