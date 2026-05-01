@@ -91,10 +91,33 @@ function App() {
         
         if (error) throw error;
         
+        const sampleProject = {
+          id: 'sample-project',
+          title: 'Sample: Music Streaming Platform',
+          vision: 'A modern full-stack music streaming application with a focus on real-time collaboration and AI-driven recommendations.',
+          frontend: {
+            stack: ['React', 'Tailwind CSS', 'Framer Motion'],
+            design: ['Glassmorphism UI', 'Bento Grid Layout', 'Dark Mode'],
+            logic: [{ key: 'Player State', desc: 'Global audio synchronization' }],
+            prompts: [{ step: 1, title: 'Hero Section', content: 'Create a glassmorphism hero section for a music app.' }]
+          },
+          backend: {
+            stack: ['Node.js', 'PostgreSQL', 'Redis'],
+            infra: ['Microservices', 'S3 Storage'],
+            logic: [{ key: 'Stream Auth', desc: 'Secure audio tokenization' }],
+            prompts: [{ step: 1, title: 'API Setup', content: 'Initialize an Express server with JWT auth.' }]
+          },
+          roadmap: [
+            { id: '1', title: 'Core Player', status: 'completed', subtasks: [] },
+            { id: '2', title: 'AI Integration', status: 'pending', subtasks: [] }
+          ],
+          isSample: true
+        };
+
         if (data && data.length > 0) {
-          setHistory(data.map(item => ({ ...item.prd_data, id: item.id })));
+          setHistory([sampleProject, ...data.map(item => ({ ...item.prd_data, id: item.id }))]);
         } else {
-          setHistory([]);
+          setHistory([sampleProject]);
         }
       } catch (error) {
         console.error('Supabase fetch failed:', error.message);
@@ -154,6 +177,14 @@ function App() {
 
   const handleGenerate = async () => {
     if (!idea.trim()) return;
+    
+    // Quality/Gibberish Check (Simple client-side)
+    const words = idea.trim().split(/\s+/);
+    if (idea.length < 15 || words.length < 3) {
+      alert('Please provide a more descriptive vision. Aim for at least 3-4 words to ensure high-quality architecture generation.');
+      return;
+    }
+
     setIsGenerating(true);
     // Rate Limit Check
     try {
@@ -773,10 +804,11 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                       <div key={i} className={`history-card glass-panel group ${isManageMode ? 'managing' : ''}`} onClick={() => !isManageMode && loadFromHistory(item)}>
                         <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px'}}>
                           <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
-                            <Globe size={20} className="text-primary" />
+                            <Globe size={20} className={item.isSample ? "text-amber-500" : "text-primary"} />
                             <h4 style={{margin: 0, fontSize: '18px'}}>{item.title}</h4>
+                            {item.isSample && <span style={{fontSize: '10px', background: 'rgba(245,158,11,0.1)', color: '#f59e0b', padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase', fontWeight: 'bold'}}>Sample</span>}
                           </div>
-                          {isManageMode && (
+                          {isManageMode && !item.isSample && (
                             <button 
                               className="p-2 hover:bg-red-500/20 rounded-lg text-red-500 transition-all opacity-0 group-hover:opacity-100"
                               onClick={(e) => deleteProject(item.id, e)}
