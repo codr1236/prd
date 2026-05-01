@@ -351,7 +351,7 @@ const ArchitectHub = () => (
     <div className="max-w-7xl mx-auto">
       <FadeSection>
         <div className="flex flex-col lg:flex-row items-center gap-20">
-          <div className="lg:w-1/2">
+          <div className="lg:w-2/5">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-zinc-400 text-xs font-medium mb-6">
               <Layout size={14} /><span>Architect Hub</span>
             </div>
@@ -359,32 +359,32 @@ const ArchitectHub = () => (
               From vision to <span className="text-zinc-500">technical mastery.</span>
             </h2>
             <p className="text-zinc-400 text-lg mb-10 max-w-lg">
-              Experience a unified workspace where roadmaps and execution are seamlessly linked together in an elite, responsive interface.
+              Experience a unified workspace where roadmaps and execution are seamlessly linked.
             </p>
             <Button variant="secondary" size="lg" className="rounded-xl">Explore Documentation</Button>
           </div>
           <div className="lg:w-3/5 w-full">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-[500px]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 h-full min-h-[500px]">
               {/* Horizontal / Main Component (Roadmap Image) */}
               <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="md:col-span-2 md:row-span-2 relative rounded-[2rem] overflow-hidden border border-zinc-800/50 bg-zinc-900/30 group shadow-2xl"
+                whileHover={{ y: -5 }}
+                className="relative rounded-[2rem] overflow-hidden border border-zinc-800/50 bg-zinc-900/30 group shadow-2xl h-[300px] md:h-auto"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent z-10 opacity-60" />
                 <img src={bentoRoadmap} alt="Project Roadmap" className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute bottom-0 left-0 p-8 z-20">
+                <div className="absolute bottom-0 left-0 p-6 md:p-8 z-20">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 backdrop-blur-md border border-zinc-700/50 text-white text-xs font-medium mb-3">
                     <Database size={14} /> Full Stack Sync
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2">Synchronized Blueprints</h3>
-                  <p className="text-zinc-400 text-sm max-w-sm">Roadmaps that adapt to your codebase in real-time.</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Blueprints</h3>
+                  <p className="text-zinc-400 text-xs md:text-sm">Adapting in real-time.</p>
                 </div>
               </motion.div>
 
               {/* Perpendicular / Vertical Component (Video) */}
               <motion.div 
-                whileHover={{ scale: 1.02 }}
-                className="md:col-span-1 md:row-span-2 relative rounded-[2rem] overflow-hidden border border-zinc-800/50 bg-zinc-900/30 group shadow-2xl flex flex-col"
+                whileHover={{ y: -5 }}
+                className="relative rounded-[2rem] overflow-hidden border border-zinc-800/50 bg-zinc-900/30 group shadow-2xl flex flex-col h-[300px] md:h-auto"
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent z-10 opacity-80" />
                 <video 
@@ -395,12 +395,12 @@ const ArchitectHub = () => (
                   playsInline 
                   className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500"
                 />
-                <div className="absolute bottom-0 left-0 p-8 z-20">
+                <div className="absolute bottom-0 left-0 p-6 md:p-8 z-20">
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 backdrop-blur-md border border-zinc-700/50 text-white text-xs font-medium mb-3">
                     <Zap size={14} /> Real-time Exec
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-2">Instant Synthesis</h3>
-                  <p className="text-zinc-400 text-sm">Watch your ideas compile instantly.</p>
+                  <h3 className="text-xl font-bold text-white mb-2">Synthesis</h3>
+                  <p className="text-zinc-400 text-xs md:text-sm">Ideas compile instantly.</p>
                 </div>
               </motion.div>
             </div>
@@ -419,9 +419,9 @@ export default function LandingPage({ onAuthClick }: { onAuthClick: () => void }
       <main>
         <Hero onAuthClick={onAuthClick} />
         <DashboardShowcase />
+        <ArchitectHub />
         <PRDSection />
         <FeatureGrid />
-        <ArchitectHub />
 
         <section className="py-32 px-6 relative border-t border-zinc-900/50">
           <FadeSection>
