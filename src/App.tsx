@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2, Mic, MicOff, Clock, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2, Mic, MicOff, Clock, ArrowRight, ShieldCheck, Trash2, Edit3 } from 'lucide-react';
 import { Button } from './components/ui/button';
 import AgentPlan from './components/ui/AgentPlan';
 import { SparklesCore } from './components/ui/sparkles';
@@ -32,6 +32,7 @@ function App() {
   const [usageCount, setUsageCount] = useState(0);
   const [showLimitModal, setShowLimitModal] = useState(false);
   const [timeLeft, setTimeLeft] = useState('');
+  const [isManageMode, setIsManageMode] = useState(false);
   
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -91,7 +92,7 @@ function App() {
         if (error) throw error;
         
         if (data && data.length > 0) {
-          setHistory(data.map(item => item.prd_data));
+          setHistory(data.map(item => ({ ...item.prd_data, id: item.id })));
         } else {
           setHistory([]);
         }
@@ -332,6 +333,20 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
     setOutputTab('roadmap');
     setShowInput(false);
     if (item.themeColor) applyThemeColor(item.themeColor);
+  };
+
+  const deleteProject = async (id, e) => {
+    e.stopPropagation();
+    if (!confirm('Are you sure you want to delete this project?')) return;
+    
+    try {
+      const { error } = await supabase.from('architectures').delete().eq('id', id);
+      if (error) throw error;
+      setHistory(prev => prev.filter(p => p.id !== id));
+    } catch (err) {
+      console.error('Delete failed:', err);
+      alert('Failed to delete project');
+    }
   };
 
   return (
@@ -728,13 +743,23 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
               <div className="history-section animate-fade-in" style={{width: '100%', maxWidth: '1000px'}}>
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px'}}>
                   <h2 style={{fontSize: '36px', color: 'var(--text-main)'}}>Project Repository</h2>
-                  <button className="btn-secondary" onClick={async () => {
-                    setHistory([]); 
-                    localStorage.removeItem('vibe_history');
-                    try {
-                      await supabase.from('architectures').delete().eq('user_id', user.id);
-                    } catch (e) {}
-                  }}>Wipe All</button>
+                  <div className="flex gap-4">
+                    <button 
+                      className={`btn-secondary ${isManageMode ? 'active-manage' : ''}`} 
+                      onClick={() => setIsManageMode(!isManageMode)}
+                      style={{background: isManageMode ? 'rgba(255,255,255,0.1)' : 'transparent'}}
+                    >
+                      <Edit3 size={16} /> {isManageMode ? 'Done' : 'Manage Repository'}
+                    </button>
+                    <button className="btn-secondary" style={{color: '#ef4444'}} onClick={async () => {
+                      if (!confirm('This will permanently delete ALL your projects. Continue?')) return;
+                      setHistory([]); 
+                      localStorage.removeItem('vibe_history');
+                      try {
+                        await supabase.from('architectures').delete().eq('user_id', user.id);
+                      } catch (e) {}
+                    }}>Wipe All</button>
+                  </div>
                 </div>
                 {history.length === 0 ? (
                   <div className="empty-state">
@@ -745,12 +770,30 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                 ) : (
                   <div className="history-grid">
                     {history.map((item, i) => (
-                      <div key={i} className="history-card glass-panel" onClick={() => loadFromHistory(item)}>
-                        <div style={{display: 'flex', alignItems: 'center', gap: '16px'}}>
-                          <Globe size={24} className="text-primary" />
-                          <h4 style={{margin: 0}}>{item.title}</h4>
+                      <div key={i} className={`history-card glass-panel group ${isManageMode ? 'managing' : ''}`} onClick={() => !isManageMode && loadFromHistory(item)}>
+                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px'}}>
+                          <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                            <Globe size={20} className="text-primary" />
+                            <h4 style={{margin: 0, fontSize: '18px'}}>{item.title}</h4>
+                          </div>
+                          {isManageMode && (
+                            <button 
+                              className="p-2 hover:bg-red-500/20 rounded-lg text-red-500 transition-all opacity-0 group-hover:opacity-100"
+                              onClick={(e) => deleteProject(item.id, e)}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          )}
                         </div>
-                        <p style={{overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical'}}>
+                        <p style={{
+                          fontSize: '14px',
+                          color: 'var(--text-muted)',
+                          lineHeight: '1.6',
+                          overflow: 'hidden', 
+                          display: '-webkit-box', 
+                          WebkitLineClamp: 3, 
+                          WebkitBoxOrient: 'vertical'
+                        }}>
                           {item.vision}
                         </p>
                       </div>
