@@ -295,15 +295,19 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
         </div>
       ) : !user ? (
         showAuthModal ? (
-           <div className="relative">
-             <button 
-               onClick={() => setShowAuthModal(false)} 
-               className="absolute top-6 left-6 z-50 text-zinc-400 hover:text-white flex items-center gap-2 transition-colors"
-             >
-               &larr; Back
-             </button>
-             <LoginCardSection />
-           </div>
+          <>
+            <div className="fixed top-0 left-0 right-0 z-[100] px-6 py-4 flex items-center justify-between pointer-events-none">
+              <div className="flex items-center gap-3 pointer-events-auto cursor-pointer" onClick={() => setShowAuthModal(false)}>
+                <button className="text-zinc-400 hover:text-white flex items-center gap-2 transition-colors text-sm font-medium">
+                  &larr; Back
+                </button>
+                <div className="h-4 w-px bg-zinc-800 mx-2" />
+                <Logo size={20} className="text-white" />
+                <span className="text-xs tracking-[0.14em] uppercase text-zinc-100 font-bold">PromptOrb</span>
+              </div>
+            </div>
+            <LoginCardSection />
+          </>
         ) : (
            <LandingPage onAuthClick={() => setShowAuthModal(true)} />
         )

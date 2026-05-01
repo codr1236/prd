@@ -144,23 +144,6 @@ export default function LoginCardSection() {
         className="absolute inset-0 w-full h-full opacity-50 mix-blend-screen pointer-events-none"
       />
 
-      {/* Header */}
-      <header className="absolute left-0 right-0 top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-zinc-800/80">
-        <div className="flex items-center gap-3">
-          <Logo size={20} className="text-zinc-50" />
-          <span className="text-xs tracking-[0.14em] uppercase text-zinc-100 font-bold">
-            PromptOrb
-          </span>
-        </div>
-        <Button
-          variant="outline"
-          className="h-9 rounded-lg border-zinc-800 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/80"
-        >
-          <span className="mr-2">Contact</span>
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      </header>
-
       {/* Centered Card */}
       <div className="h-full w-full grid place-items-center px-4">
         {!isRegister ? (

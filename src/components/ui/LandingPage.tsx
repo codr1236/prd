@@ -405,14 +405,13 @@ export default function LandingPage({ onAuthClick }: { onAuthClick: () => void }
         <PRDSection />
         <FeatureGrid />
 
-        <section className="py-48 px-6 relative bg-zinc-950 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.05),transparent_70%)]" />
+        <section className="py-24 px-6 relative bg-zinc-950 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.02),transparent_70%)]" />
           <FadeSection>
-            <div className="max-w-5xl mx-auto rounded-[3.5rem] bg-white p-12 md:p-24 text-zinc-950 text-center relative overflow-hidden shadow-[0_0_100px_rgba(255,255,255,0.1)]">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-zinc-950/[0.02] blur-[100px] rounded-full translate-x-1/2 -translate-y-1/2" />
-              <h2 className="text-5xl md:text-8xl font-bold mb-8 tracking-tighter leading-[0.9]">Ready to map <br />your vision?</h2>
-              <p className="text-zinc-500 text-xl md:text-2xl mb-12 max-w-xl mx-auto font-medium tracking-tight">Join the elite architects building the next generation of masterpieces.</p>
-              <Button size="lg" className="rounded-2xl px-12 py-8 text-2xl bg-zinc-950 text-white hover:bg-zinc-900 shadow-2xl transition-all hover:scale-105 active:scale-95 group" onClick={onAuthClick}>
+            <div className="max-w-3xl mx-auto rounded-[2rem] bg-white p-12 md:p-14 text-zinc-950 text-center relative overflow-hidden shadow-2xl">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tighter">Ready to map your vision?</h2>
+              <p className="text-zinc-500 text-base md:text-lg mb-8 max-w-md mx-auto font-medium">Join the elite architects building the next generation of masterpieces.</p>
+              <Button size="lg" className="rounded-xl px-8 py-5 text-lg bg-zinc-950 text-white hover:bg-zinc-900 shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all hover:scale-[1.02] active:scale-95 group" onClick={onAuthClick}>
                 Get Started for Free <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
