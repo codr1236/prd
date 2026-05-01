@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 import { Logo } from "./Logo";
+import { SparklesCore } from "./sparkles";
 import dashboardPreview from "../../assets/dashboard-preview.png";
 
 const GithubIcon = ({ size = 24, className = "" }) => (
@@ -135,44 +136,22 @@ Navigation.displayName = "Navigation";
 
 const Hero = memo(({ onAuthClick }: { onAuthClick: () => void }) => (
   <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
-    {/* Custom animated background */}
+    {/* Dashboard mesh bloom background — same as main app */}
     <div className="absolute inset-0 -z-10 overflow-hidden">
-      {/* Floating gradient orb 1 - large, top-center */}
-      <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full opacity-[0.07]"
-        style={{ background: 'radial-gradient(circle, #ffffff 0%, transparent 70%)', top: '-10%', left: '30%' }}
-        animate={{ x: [0, 80, -40, 0], y: [0, 40, -20, 0], scale: [1, 1.15, 0.95, 1] }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      {/* Floating gradient orb 2 - medium, right */}
-      <motion.div
-        className="absolute w-[400px] h-[400px] rounded-full opacity-[0.05]"
-        style={{ background: 'radial-gradient(circle, #a1a1aa 0%, transparent 70%)', top: '20%', right: '-5%' }}
-        animate={{ x: [0, -60, 30, 0], y: [0, -50, 25, 0], scale: [1, 1.1, 0.9, 1] }}
-        transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      {/* Floating gradient orb 3 - small, bottom-left */}
-      <motion.div
-        className="absolute w-[300px] h-[300px] rounded-full opacity-[0.06]"
-        style={{ background: 'radial-gradient(circle, #d4d4d8 0%, transparent 70%)', bottom: '5%', left: '10%' }}
-        animate={{ x: [0, 50, -30, 0], y: [0, -30, 15, 0], scale: [1, 1.2, 0.85, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      {/* Aurora sweep - horizontal gradient beam */}
-      <motion.div
-        className="absolute w-full h-[1px] top-[40%] left-0 opacity-[0.08]"
-        style={{ background: 'linear-gradient(90deg, transparent 0%, #ffffff 30%, #a1a1aa 50%, #ffffff 70%, transparent 100%)' }}
-        animate={{ opacity: [0.03, 0.1, 0.03], scaleX: [0.8, 1.2, 0.8] }}
-        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      {/* Subtle dot grid */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
-          backgroundSize: '24px 24px',
-        }}
-      />
+      <div className="bg-mesh" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+        <div className="bg-mesh-blob" />
+      </div>
+      {/* Sparkles particle overlay */}
+      <div className="absolute inset-0 opacity-60">
+        <SparklesCore
+          background="transparent"
+          minSize={0.4}
+          maxSize={1.4}
+          particleDensity={40}
+          particleColor="#ffffff"
+          speed={0.3}
+        />
+      </div>
     </div>
 
     <div className="max-w-5xl mx-auto text-center relative z-10">
