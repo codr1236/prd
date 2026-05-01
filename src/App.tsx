@@ -75,11 +75,13 @@ function App() {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
+    if (!user) return;
     const fetchHistory = async () => {
       try {
         const { data, error } = await supabase
           .from('architectures')
           .select('*')
+          .eq('user_id', user.id)
           .order('created_at', { ascending: false });
         
         if (error) throw error;
@@ -87,16 +89,16 @@ function App() {
         if (data && data.length > 0) {
           setHistory(data.map(item => item.prd_data));
         } else {
-          loadLocalHistory();
+          setHistory([]);
         }
       } catch (error) {
-        console.error('Supabase fetch failed. Falling back to local storage:', error.message);
+        console.error('Supabase fetch failed:', error.message);
         loadLocalHistory();
       }
     };
     
     fetchHistory();
-  }, []);
+  }, [user]);
 
   const loadLocalHistory = () => {
     try {
@@ -172,7 +174,8 @@ function App() {
       try {
         const { error } = await supabase.from('architectures').insert([{ 
           title: fullPrd.title, 
-          prd_data: fullPrd 
+          prd_data: fullPrd,
+          user_id: user.id
         }]);
         if (error) console.error('Supabase insert failed:', error.message);
       } catch (e) {}
@@ -617,7 +620,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                     setHistory([]); 
                     localStorage.removeItem('vibe_history');
                     try {
-                      await supabase.from('architectures').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                      await supabase.from('architectures').delete().eq('user_id', user.id);
                     } catch (e) {}
                   }}>Wipe All</button>
                 </div>

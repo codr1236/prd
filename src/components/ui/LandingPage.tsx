@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo, forwardRef } from "react";
+import React, { useState, useEffect, memo, forwardRef, useRef } from "react";
 import { 
   ArrowRight, 
   Menu, 
@@ -24,8 +24,9 @@ import {
   MoreVertical,
   Clock,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 import { Logo } from "./Logo";
+import dashboardPreview from "../../assets/dashboard-preview.png";
 
 const GithubIcon = ({ size = 24, className = "" }) => (
   <svg
@@ -196,142 +197,39 @@ const Hero = memo(({ onAuthClick }: { onAuthClick: () => void }) => (
 ));
 Hero.displayName = "Hero";
 
-const DashboardPlaceholder = () => {
+const DashboardShowcase = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  const rotateX = useTransform(scrollYProgress, [0, 0.3], [8, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.3], [0.95, 1]);
+
   return (
-    <section className="py-24 px-6 bg-zinc-950 border-t border-zinc-900/50 relative overflow-hidden">
+    <section ref={containerRef} className="py-24 px-6 bg-zinc-950 border-t border-zinc-900/50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+        <motion.div style={{ opacity }} className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 mb-4 tracking-tight">The Architect's Workspace</h2>
           <p className="text-zinc-400 max-w-xl mx-auto">Manage your projects with a streamlined, professional interface designed for technical clarity.</p>
-        </div>
+        </motion.div>
 
-        <div className="relative group mx-auto max-w-6xl">
-          <div className="absolute -inset-1 bg-gradient-to-r from-zinc-500/20 to-zinc-800/20 rounded-[2rem] blur-2xl opacity-50" />
-          
-          <div className="relative bg-black border border-zinc-800 rounded-[1.5rem] shadow-2xl h-[600px] flex overflow-hidden">
-            {/* Sidebar (Column 1) */}
-            <div className="hidden md:flex w-64 border-r border-zinc-900 bg-zinc-950 flex-col p-4 shrink-0">
-              <div className="flex items-center gap-2 mb-8 px-2">
-                <div className="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center text-xs font-bold text-white">AK</div>
-                <span className="text-sm font-medium text-zinc-300">Alicia Koch</span>
-                <ChevronRight size={14} className="ml-auto text-zinc-600 rotate-90" />
-              </div>
-
-              <div className="space-y-1 mb-8">
-                {[
-                  { icon: <Inbox size={16} />, label: "Blueprints", count: "128", active: true },
-                  { icon: <FileText size={16} />, label: "Drafts", count: "9" },
-                  { icon: <Send size={16} />, label: "Sent" },
-                  { icon: <Trash2 size={16} />, label: "Junk", count: "23" },
-                  { icon: <Archive size={16} />, label: "Archive" }
-                ].map((item) => (
-                  <button key={item.label} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${item.active ? 'bg-zinc-800 text-white' : 'text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300'}`}>
-                    {item.icon}
-                    <span>{item.label}</span>
-                    {item.count && <span className="ml-auto text-[10px] font-bold text-zinc-600">{item.count}</span>}
-                  </button>
-                ))}
-              </div>
-
-              <div className="space-y-1">
-                <h4 className="px-3 text-[10px] font-bold text-zinc-600 uppercase tracking-widest mb-2">Workspace</h4>
-                {[
-                  { icon: <Target size={16} />, label: "Active Roadmaps", count: "972" },
-                  { icon: <Zap size={16} />, label: "Synthesis Queue", count: "342" },
-                  { icon: <Layers size={16} />, label: "Templates", count: "128" }
-                ].map((item) => (
-                  <button key={item.label} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300 transition-colors">
-                    {item.icon}
-                    <span>{item.label}</span>
-                    <span className="ml-auto text-[10px] text-zinc-600">{item.count}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* List View (Column 2) */}
-            <div className="w-full md:w-80 border-r border-zinc-900 flex flex-col shrink-0">
-              <div className="p-4 border-b border-zinc-900 flex items-center gap-2">
-                <h3 className="font-bold text-white text-lg">Inbox</h3>
-                <div className="ml-auto flex gap-1 p-0.5 bg-zinc-900 rounded-lg">
-                  <button className="px-3 py-1 text-[10px] font-bold bg-zinc-800 text-white rounded-md">All roadmaps</button>
-                  <button className="px-3 py-1 text-[10px] font-bold text-zinc-500 hover:text-zinc-300">Unread</button>
-                </div>
-              </div>
-              <div className="p-4 border-b border-zinc-900">
-                <div className="relative">
-                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600" />
-                  <input type="text" placeholder="Search roadmaps..." className="w-full bg-zinc-900 text-white border-none rounded-lg pl-9 pr-4 py-2 text-xs focus:ring-1 focus:ring-zinc-700 outline-none" />
-                </div>
-              </div>
-              <div className="flex-1 overflow-y-auto">
-                {[
-                  { user: "William Smith", title: "Meeting Tomorrow", preview: "Hi, let's have a meeting tomorrow to discuss the architecture plan...", tags: ["architect", "core", "urgent"], time: "9:00 AM", active: true },
-                  { user: "Alice Smith", title: "Project Update", preview: "Thank you for the roadmap update. It looks great! I've gone through...", tags: ["frontend", "synthesis"], time: "over 1 yr ago" },
-                  { user: "Bob Johnson", title: "Weekend Plans", preview: "Any plans for the implementation? I was thinking of going with...", tags: ["backend"], time: "almost 2 yrs ago" }
-                ].map((blueprint, i) => (
-                  <div key={i} className={`p-4 border-b border-zinc-900 cursor-pointer transition-colors ${blueprint.active ? 'bg-zinc-900/50' : 'hover:bg-zinc-900/20'}`}>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-sm font-bold text-zinc-100">{blueprint.user}</span>
-                      <span className="text-[10px] text-zinc-600">{blueprint.time}</span>
-                    </div>
-                    <div className="text-xs text-zinc-300 font-medium mb-1">{blueprint.title}</div>
-                    <p className="text-[10px] text-zinc-500 line-clamp-2 mb-3 leading-relaxed">{blueprint.preview}</p>
-                    <div className="flex gap-2">
-                      {blueprint.tags.map(tag => (
-                        <span key={tag} className="px-2 py-0.5 rounded bg-zinc-800 text-[9px] text-zinc-400 font-bold">{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Detail View (Column 3) */}
-            <div className="hidden md:flex flex-1 bg-black flex-col overflow-hidden">
-              <div className="p-4 border-b border-zinc-900 flex items-center gap-4 text-zinc-500">
-                <button className="p-2 hover:bg-zinc-900 rounded-lg transition-colors text-white"><Archive size={16} /></button>
-                <button className="p-2 hover:bg-zinc-900 rounded-lg transition-colors text-white"><Trash2 size={16} /></button>
-                <div className="w-px h-4 bg-zinc-800 mx-2" />
-                <button className="p-2 hover:bg-zinc-900 rounded-lg transition-colors text-white"><Clock size={16} /></button>
-                <div className="ml-auto flex items-center gap-2">
-                  <button className="p-2 hover:bg-zinc-900 rounded-lg transition-colors text-white"><MoreVertical size={16} /></button>
-                </div>
-              </div>
-
-              <div className="flex-1 p-8 overflow-y-auto">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 rounded-full bg-zinc-900 flex items-center justify-center text-sm font-bold border border-zinc-800 text-white">WS</div>
-                  <div>
-                    <h2 className="text-lg font-bold text-white leading-none mb-1">William Smith</h2>
-                    <p className="text-sm text-zinc-400">Meeting Tomorrow</p>
-                    <p className="text-xs text-zinc-600">Reply-To: williamsmith@example.com</p>
-                  </div>
-                  <span className="ml-auto text-xs text-zinc-600">Oct 22, 2023, 9:00:00 AM</span>
-                </div>
-
-                <div className="space-y-6 text-sm text-zinc-300 leading-relaxed max-w-2xl">
-                  <p>Hi, let's have a meeting tomorrow to discuss the project. I've been reviewing the project details and have some ideas I'd like to share. It's crucial that we align on our next steps to ensure the project's success.</p>
-                  <p>Please come prepared with any questions or insights you may have. Looking forward to our meeting!</p>
-                  <p>Best regards,<br/>William</p>
-                </div>
-              </div>
-
-              <div className="p-6 border-t border-zinc-900">
-                <div className="bg-zinc-900/50 rounded-2xl p-4 border border-zinc-800">
-                  <textarea placeholder="Reply to William Smith..." className="w-full bg-transparent border-none outline-none text-sm text-zinc-300 resize-none h-24" />
-                  <div className="flex items-center mt-4">
-                    <label className="flex items-center gap-2 text-[10px] font-bold text-zinc-600 cursor-pointer hover:text-zinc-400">
-                      <div className="w-8 h-4 bg-zinc-800 rounded-full p-0.5"><div className="w-3 h-3 bg-zinc-600 rounded-full" /></div>
-                      Mute this roadmap
-                    </label>
-                    <Button size="sm" className="ml-auto px-6 font-bold">Send</Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <motion.div
+          style={{ y, rotateX, scale, perspective: 1200 }}
+          className="relative group mx-auto max-w-5xl"
+        >
+          <div className="absolute -inset-4 bg-gradient-to-r from-zinc-500/10 via-zinc-400/5 to-zinc-800/10 rounded-[2rem] blur-3xl opacity-60" />
+          <div className="relative rounded-[1.25rem] overflow-hidden border border-zinc-800 shadow-2xl shadow-black/50">
+            <img
+              src={dashboardPreview}
+              alt="PromptOrb Dashboard"
+              className="w-full h-auto block"
+              loading="lazy"
+            />
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -459,7 +357,7 @@ export default function LandingPage({ onAuthClick }: { onAuthClick: () => void }
       <Navigation onAuthClick={onAuthClick} />
       <main>
         <Hero onAuthClick={onAuthClick} />
-        <DashboardPlaceholder />
+        <DashboardShowcase />
         <PRDSection />
         <FeatureGrid />
         <ArchitectHub />
