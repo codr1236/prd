@@ -297,20 +297,34 @@ const FeatureGrid = () => (
           <h2 className="text-3xl md:text-5xl font-bold text-zinc-100 mb-4 tracking-tight">Technical Powerhouse</h2>
           <p className="text-zinc-400 max-w-xl mx-auto">Precision-engineered for the modern architect who needs more than just code.</p>
         </div>
-        <div className="grid md:grid-cols-4 gap-6">
+        <motion.div 
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15 } }
+          }}
+          className="grid grid-cols-1 divide-y divide-dashed divide-zinc-800/50 border-t border-b border-dashed border-zinc-800/50 sm:grid-cols-2 md:grid-cols-4 sm:divide-x sm:divide-y-0 sm:border-l sm:border-r"
+        >
           {[
-            { title: "Architecture Synthesis", desc: "Full-stack blueprints with granular checklists.", icon: <Layers className="text-zinc-100" /> },
-            { title: "Voice-to-Text", desc: "Hands-free project ideation in real-time.", icon: <Mic className="text-zinc-100" /> },
-            { title: "Supabase Persistence", desc: "Roadmaps saved to your personal repository.", icon: <Database className="text-zinc-100" /> },
-            { title: "Gooey Synthesis", desc: "Visualizing AI 'thinking' during roadmap generation.", icon: <Zap className="text-zinc-100" /> },
+            { title: "Architecture Synthesis", description: "Full-stack blueprints with granular checklists.", icon: Layers },
+            { title: "Voice-to-Text", description: "Hands-free project ideation in real-time.", icon: Mic },
+            { title: "Supabase Persistence", description: "Roadmaps saved to your personal repository.", icon: Database },
+            { title: "Gooey Synthesis", description: "Visualizing AI 'thinking' during roadmap generation.", icon: Zap },
           ].map((f, i) => (
-            <motion.div key={i} whileHover={{ y: -5 }} className="group p-8 rounded-3xl bg-zinc-900/40 border border-zinc-800/50 hover:bg-zinc-900 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-zinc-100/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">{f.icon}</div>
-              <h3 className="text-xl font-bold text-zinc-100 mb-3">{f.title}</h3>
-              <p className="text-zinc-500 text-sm leading-relaxed">{f.desc}</p>
+            <motion.div 
+              key={i} 
+              variants={{
+                hidden: { filter: 'blur(4px)', y: 20, opacity: 0 },
+                visible: { filter: 'blur(0px)', y: 0, opacity: 1, transition: { duration: 0.8, ease: "easeOut" } }
+              }}
+              className="group border-zinc-800/50 sm:border-t-0"
+            >
+              <FeatureCard feature={f} className="h-full bg-transparent border-0 rounded-none hover:bg-zinc-900/30 transition-all duration-500" />
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </FadeSection>
     </div>
   </section>
