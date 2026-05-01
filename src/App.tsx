@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, Terminal, FileText, Settings, History, Send, Copy, Download, Share2, Check, Zap, Code, Layout, Target, Database, Globe, Layers, MoreVertical, ChevronDown, FileJson, FileType, AlertTriangle, Rocket, Box, Palette, Wand2, Mic, MicOff, Clock, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Button } from './components/ui/button';
 import AgentPlan from './components/ui/AgentPlan';
@@ -136,6 +137,9 @@ function App() {
         setUsageCount(0);
         setShowLimitModal(false);
       }
+    } else {
+      setUsageCount(0);
+      setShowLimitModal(false);
     }
   };
 
