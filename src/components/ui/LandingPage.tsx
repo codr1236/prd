@@ -137,11 +137,11 @@ const Hero = memo(({ onAuthClick }: { onAuthClick: () => void }) => (
   <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
     <div className="absolute inset-0 -z-10">
       <FallingPattern
-        className="h-full w-full [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]"
-        color="rgba(161,161,170,0.4)"
+        className="h-full w-full [mask-image:radial-gradient(ellipse_at_center,black_50%,transparent_100%)]"
+        color="rgba(255,255,255,0.6)"
         backgroundColor="#09090b"
-        duration={120}
-        blurIntensity="0.8em"
+        duration={100}
+        blurIntensity="0.5em"
         density={1}
       />
     </div>
