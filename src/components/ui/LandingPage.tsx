@@ -21,7 +21,8 @@ import { Logo } from "./Logo";
 import { SparklesCore } from "./sparkles";
 import { FeatureCard } from "./grid-feature-cards";
 import dashboardPreview from "../../assets/dashboard-preview.png";
-
+import bentoRoadmap from "../../assets/bento-roadmap.png";
+import bentoVideo from "../../assets/bento-video.mp4";
 /* ─── Custom SVG Icon ─── */
 const GithubIcon = ({ size = 24, className = "" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
@@ -357,39 +358,52 @@ const ArchitectHub = () => (
             <h2 className="text-4xl md:text-6xl font-bold text-zinc-100 mb-8 tracking-tighter leading-tight">
               From vision to <span className="text-zinc-500">technical mastery.</span>
             </h2>
-            <ul className="space-y-4 mb-10">
-              {["Interactive mesh backgrounds", "Sleek glassmorphism panels", "Real-time roadmap persistence", "Full-stack synthesis"].map((item, i) => (
-                <li key={i} className="flex items-center gap-3 text-zinc-300 font-medium">
-                  <CheckCircle size={20} className="text-zinc-500" /> {item}
-                </li>
-              ))}
-            </ul>
+            <p className="text-zinc-400 text-lg mb-10 max-w-lg">
+              Experience a unified workspace where roadmaps and execution are seamlessly linked together in an elite, responsive interface.
+            </p>
             <Button variant="secondary" size="lg" className="rounded-xl">Explore Documentation</Button>
           </div>
-          <div className="lg:w-1/2 w-full relative">
-            <div className="absolute -inset-1 bg-zinc-100/10 blur-3xl rounded-full" />
-            <GlassCard className="p-0 overflow-hidden border-zinc-700/50 shadow-2xl relative z-10">
-              <div className="bg-zinc-800/50 p-4 border-b border-zinc-700/50 flex justify-between">
-                <div className="flex gap-2"><div className="w-3 h-3 rounded-full bg-zinc-700" /><div className="w-3 h-3 rounded-full bg-zinc-700" /></div>
-                <span className="text-[10px] uppercase font-bold text-zinc-500 tracking-widest">Synthesis Engine v2.5</span>
-              </div>
-              <div className="p-8 space-y-8">
-                <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-800 text-sm text-zinc-400 italic">"Build a premium AI playlist curator with Spotify API..."</div>
-                <div className="flex justify-center">
-                  <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 2 }} className="w-12 h-12 bg-zinc-100 rounded-full flex items-center justify-center shadow-lg">
-                    <Cpu size={24} className="text-black" />
-                  </motion.div>
+          <div className="lg:w-3/5 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-full min-h-[500px]">
+              {/* Horizontal / Main Component (Roadmap Image) */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="md:col-span-2 md:row-span-2 relative rounded-[2rem] overflow-hidden border border-zinc-800/50 bg-zinc-900/30 group shadow-2xl"
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent z-10 opacity-60" />
+                <img src={bentoRoadmap} alt="Project Roadmap" className="w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute bottom-0 left-0 p-8 z-20">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 backdrop-blur-md border border-zinc-700/50 text-white text-xs font-medium mb-3">
+                    <Database size={14} /> Full Stack Sync
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">Synchronized Blueprints</h3>
+                  <p className="text-zinc-400 text-sm max-w-sm">Roadmaps that adapt to your codebase in real-time.</p>
                 </div>
-                <div className="space-y-3">
-                  {[1, 2, 3].map(i => (
-                    <div key={i} className={`p-3 bg-zinc-900 border border-zinc-800 rounded-xl flex items-center gap-3 ${i === 3 ? "opacity-40" : ""}`}>
-                      <span className="text-[10px] font-bold text-zinc-600">{i}</span>
-                      <span className="text-xs text-zinc-200">{i === 1 ? "OAuth2 Security Layer" : i === 2 ? "Vector DB Mood Analysis" : "Frontend Frame system..."}</span>
-                    </div>
-                  ))}
+              </motion.div>
+
+              {/* Perpendicular / Vertical Component (Video) */}
+              <motion.div 
+                whileHover={{ scale: 1.02 }}
+                className="md:col-span-1 md:row-span-2 relative rounded-[2rem] overflow-hidden border border-zinc-800/50 bg-zinc-900/30 group shadow-2xl flex flex-col"
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-transparent z-10 opacity-80" />
+                <video 
+                  src={bentoVideo} 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline 
+                  className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity duration-500"
+                />
+                <div className="absolute bottom-0 left-0 p-8 z-20">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/80 backdrop-blur-md border border-zinc-700/50 text-white text-xs font-medium mb-3">
+                    <Zap size={14} /> Real-time Exec
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">Instant Synthesis</h3>
+                  <p className="text-zinc-400 text-sm">Watch your ideas compile instantly.</p>
                 </div>
-              </div>
-            </GlassCard>
+              </motion.div>
+            </div>
           </div>
         </div>
       </FadeSection>
