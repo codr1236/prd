@@ -9,7 +9,7 @@ import { Logo } from './components/ui/Logo';
 import { supabase } from './lib/supabase';
 import './App.css';
 
-const MISTRAL_KEY = 'tqd3sZ8qnPrf95jfJ68UihEeALoXcKbQ';
+const MISTRAL_KEY = import.meta.env.VITE_MISTRAL_KEY;
 
 function App() {
   const [idea, setIdea] = useState('');
@@ -111,6 +111,24 @@ function App() {
   const handleGenerate = async () => {
     if (!idea.trim()) return;
     setIsGenerating(true);
+    // Rate Limit Check
+    try {
+      const { data: allowed, error: rateLimitError } = await supabase.rpc('check_and_increment_usage', {
+        user_id_input: user.id,
+        max_per_day: 10 // Set your desired daily limit
+      });
+
+      if (rateLimitError) throw rateLimitError;
+      if (!allowed) {
+        alert('Daily generation limit reached. Please come back tomorrow!');
+        setIsGenerating(false);
+        return;
+      }
+    } catch (err) {
+      console.error('Rate limit check failed:', err);
+      // Fallback: allow generation if rate limit check fails to avoid blocking users
+    }
+
     setPrd(null);
 
     const systemPrompt = `You are a Full-Stack Architect AI. Generate a PRD for the user's idea in STRICT JSON format.
