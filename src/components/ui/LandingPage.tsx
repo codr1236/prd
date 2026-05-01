@@ -26,6 +26,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "./Logo";
+import { FallingPattern } from "./falling-pattern";
 
 const GithubIcon = ({ size = 24, className = "" }) => (
   <svg
@@ -134,8 +135,16 @@ Navigation.displayName = "Navigation";
 
 const Hero = memo(({ onAuthClick }: { onAuthClick: () => void }) => (
   <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 pt-32 pb-20 overflow-hidden">
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-[500px] bg-zinc-400/5 blur-[120px] rounded-full -z-10" />
-    <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-zinc-800/10 blur-[100px] -z-10" />
+    <div className="absolute inset-0 -z-10">
+      <FallingPattern
+        className="h-full w-full [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_80%)]"
+        color="rgba(161,161,170,0.4)"
+        backgroundColor="#09090b"
+        duration={120}
+        blurIntensity="0.8em"
+        density={1}
+      />
+    </div>
 
     <div className="max-w-5xl mx-auto text-center relative z-10">
       <motion.aside initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-8 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm">
