@@ -7,6 +7,8 @@ import LandingPage from './components/ui/LandingPage';
 import LoginCardSection from './components/ui/login-signup';
 import { GooeyLoader } from './components/ui/loader-10';
 import { Logo } from './components/ui/Logo';
+import { TimeLeftDisplay } from './components/ui/TimeLeftDisplay';
+import { PrdViewer } from './components/ui/PrdViewer';
 import { supabase } from './lib/supabase';
 import './App.css';
 
@@ -31,7 +33,6 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [usageCount, setUsageCount] = useState(0);
   const [showLimitModal, setShowLimitModal] = useState(false);
-  const [timeLeft, setTimeLeft] = useState('');
   const [isManageMode, setIsManageMode] = useState(false);
   
   useEffect(() => {
@@ -127,21 +128,6 @@ function App() {
     
     fetchHistory();
     fetchUsage();
-
-    const timer = setInterval(() => {
-      const now = new Date();
-      const tomorrow = new Date();
-      tomorrow.setUTCHours(24, 0, 0, 0);
-      const diff = tomorrow.getTime() - now.getTime();
-      
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      
-      setTimeLeft(`${hours}h ${minutes}m ${seconds}s`);
-    }, 1000);
-
-    return () => clearInterval(timer);
   }, [user]);
 
   const fetchUsage = async () => {
@@ -392,9 +378,7 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
             <h2 className="text-3xl font-bold mb-4 tracking-tighter">Daily limit reached</h2>
             <p className="text-zinc-400 mb-8 leading-relaxed">You've reached your maximum of 5 PRDs for today. Your limit will reset in:</p>
             
-            <div className="text-4xl font-mono font-bold text-white mb-10 tracking-widest bg-zinc-800/30 py-4 rounded-2xl border border-zinc-800">
-              {timeLeft}
-            </div>
+            <TimeLeftDisplay />
 
             <div className="space-y-4">
               <button className="w-full py-4 rounded-2xl bg-white text-zinc-950 font-bold text-lg hover:bg-zinc-200 transition-all flex items-center justify-center gap-2 group">
@@ -614,159 +598,16 @@ ${(prd.backend.prompts || []).map(p => `\nSTEP ${p.step}: ${p.title}\nPROMPT: ${
                   </section>
                 )}
 
-                {prd && (
-                  <section className="output-section animate-fade-in">
-                    <div className="prd-viewer glass-panel">
-                      <div className="arch-header">
-                        <div className="arch-tabs">
-                          <button className={`arch-tab ${outputTab === 'roadmap' ? 'active' : ''}`} onClick={() => setOutputTab('roadmap')}><Rocket size={14} /> Roadmap</button>
-                          <button className={`arch-tab ${outputTab === 'fullstack' ? 'active' : ''}`} onClick={() => setOutputTab('fullstack')}><Layers size={14} /> Full Stack</button>
-                          <button className={`arch-tab ${outputTab === 'frontend' ? 'active' : ''}`} onClick={() => setOutputTab('frontend')}><Layout size={14} /> Client</button>
-                          <button className={`arch-tab ${outputTab === 'backend' ? 'active' : ''}`} onClick={() => setOutputTab('backend')}><Database size={14} /> Server</button>
-                        </div>
-                        
-                        <div className="export-container" style={{position: 'relative'}}>
-                          <button className="btn-secondary" onClick={() => setShowExportMenu(!showExportMenu)}>
-                            <Download size={16} /> Export <ChevronDown size={14} style={{marginLeft: '4px'}} />
-                          </button>
-                          
-                          {showExportMenu && (
-                            <div className="export-menu animate-fade-in" style={{position: 'absolute', top: '100%', right: 0, marginTop: '12px', width: '220px', zIndex: 100}}>
-                              <div className="menu-group" style={{padding: '8px', borderBottom: '1px solid var(--border-light)', marginBottom: '4px'}}>
-                                <div style={{fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 'bold', paddingLeft: '8px'}}>DOWNLOAD AS...</div>
-                                <button className="menu-item" onClick={() => downloadFile('txt')}><FileType size={14} /> Plain Text</button>
-                                <button className="menu-item" onClick={() => downloadFile('json')}><FileJson size={14} /> JSON File</button>
-                              </div>
-                              <div className="menu-group" style={{padding: '8px'}}>
-                                <div style={{fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 'bold', paddingLeft: '8px'}}>COPY AS...</div>
-                                <button className="menu-item" onClick={() => copyToClipboard(generatePlainTextPRD(), 'text')}><Copy size={14} /> Plain Text</button>
-                                <button className="menu-item" onClick={() => copyToClipboard('', 'json')}><Copy size={14} /> JSON String</button>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="architecture-viewer">
-                        {outputTab === 'fullstack' ? (
-                          <>
-                            <div className="full-stack-combined animate-fade-in">
-                              <h1 className="arch-title">{prd.title} - Full Stack Architecture</h1>
-                              <div className="arch-section glass-panel" style={{border: 'none'}}>
-                                <h2><Target size={24} /> Vision</h2>
-                                <p className="subtitle" style={{textAlign: 'left', fontSize: '16px', color: 'var(--text-main)'}}>{prd.vision}</p>
-                              </div>
-
-                              {/* Frontend Section */}
-                              <div className="combined-group" style={{marginTop: '60px'}}>
-                                <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px'}}>
-                                  <Layout size={32} className="text-primary" />
-                                  <h2 style={{margin: 0, fontSize: '28px', color: 'var(--text-main)'}}>Frontend Architecture</h2>
-                                </div>
-                                <div className="arch-section">
-                                  <h3>UI Foundation</h3>
-                                  <ul className="arch-list">
-                                    <li><strong>Stack:</strong> {prd.frontend?.stack?.map(tech => <span key={tech} className="pill-code">{tech}</span>)}</li>
-                                    <li><strong>Design:</strong> {prd.frontend?.design?.map((item, i) => <span key={i} className="pill-code">{item}</span>)}</li>
-                                  </ul>
-                                </div>
-                                <div className="arch-section">
-                                  <h3>Logic & Prompts</h3>
-                                  <ul className="arch-list">
-                                    {prd.frontend?.logic?.map((item, i) => <li key={i}><strong>{item.key}</strong>: {item.desc}</li>)}
-                                  </ul>
-                                  <div className="prompt-sequence" style={{marginTop: '32px'}}>
-                                    {prd.frontend?.prompts?.map((step, i) => (
-                                      <div key={i} className="prompt-step">
-                                        <div className="prompt-box">
-                                          <div className="prompt-box-header">
-                                            <div className="header-label">PROMPT {step.step}</div>
-                                            <button className="btn-mini-copy" onClick={() => copyToClipboard(step.content)}>Copy</button>
-                                          </div>
-                                          <div className="prompt-content">{step.content}</div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Backend Section */}
-                              <div className="combined-group" style={{marginTop: '60px'}}>
-                                <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '32px'}}>
-                                  <Database size={32} className="text-secondary" />
-                                  <h2 style={{margin: 0, fontSize: '28px', color: 'var(--text-main)'}}>Backend Infrastructure</h2>
-                                </div>
-                                <div className="arch-section">
-                                  <h3>Core System</h3>
-                                  <ul className="arch-list">
-                                    <li><strong>Stack:</strong> {prd.backend?.stack?.map(tech => <span key={tech} className="pill-code">{tech}</span>)}</li>
-                                    <li><strong>Infra:</strong> {prd.backend?.infra?.map((item, i) => <span key={i} className="pill-code">{item}</span>)}</li>
-                                  </ul>
-                                </div>
-                                <div className="arch-section">
-                                  <h3>API & Prompts</h3>
-                                  <ul className="arch-list">
-                                    {prd.backend?.logic?.map((item, i) => <li key={i}><strong>{item.key}</strong>: {item.desc}</li>)}
-                                  </ul>
-                                  <div className="prompt-sequence" style={{marginTop: '32px'}}>
-                                    {prd.backend?.prompts?.map((step, i) => (
-                                      <div key={i} className="prompt-step">
-                                        <div className="prompt-box">
-                                          <div className="prompt-box-header">
-                                            <div className="header-label">PROMPT {step.step}</div>
-                                            <button className="btn-mini-copy" onClick={() => copyToClipboard(step.content)}>Copy</button>
-                                          </div>
-                                          <div className="prompt-content">{step.content}</div>
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-
-
-                            </div>
-                          </>
-                        ) :
-                        outputTab === 'roadmap' ? (
-                          <div className="specialized-view animate-fade-in">
-                            <h1 className="arch-title">{prd.title} - Execution Roadmap</h1>
-                            <AgentPlan tasks={prd.roadmap || []} />
-                          </div>
-                        ) : (
-                          <div className="specialized-view animate-fade-in">
-                            <h1 className="arch-title">{prd.title} - {outputTab === 'frontend' ? 'Client' : 'Server'}</h1>
-                            <div className="arch-section">
-                              <h2>{outputTab === 'frontend' ? 'UI Foundation' : 'Infrastructure'}</h2>
-                              <ul className="arch-list">
-                                <li><strong>Stack:</strong> {prd[outputTab]?.stack?.map(tech => <span key={tech} className="pill-code">{tech}</span>)}</li>
-                                <li><strong>{outputTab === 'frontend' ? 'Design:' : 'Pattern:'}</strong> {prd[outputTab]?.[outputTab === 'frontend' ? 'design' : 'infra']?.map((item, i) => <span key={i} className="pill-code">{item}</span>)}</li>
-                              </ul>
-                            </div>
-                            <div className="arch-section">
-                              <h2>AI Implementation Sequence</h2>
-                              <div className="prompt-sequence">
-                                {prd[outputTab]?.prompts?.map((step, i) => (
-                                  <div key={i} className="prompt-step" style={{marginTop: i === 0 ? '0' : '40px'}}>
-                                    <h3 style={{color: 'var(--text-main)', fontSize: '20px', marginBottom: '16px'}}>{step.step}. {step.title}</h3>
-                                    <div className="prompt-box">
-                                      <div className="prompt-box-header">
-                                        <div className="header-label">ACTIONABLE PROMPT</div>
-                                        <button className="btn-mini-copy" onClick={() => copyToClipboard(step.content)}>Copy</button>
-                                      </div>
-                                      <div className="prompt-content">{step.content}</div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </section>
-                )}
+                <PrdViewer 
+                  prd={prd}
+                  outputTab={outputTab}
+                  setOutputTab={setOutputTab}
+                  showExportMenu={showExportMenu}
+                  setShowExportMenu={setShowExportMenu}
+                  downloadFile={downloadFile}
+                  copyToClipboard={copyToClipboard}
+                  generatePlainTextPRD={generatePlainTextPRD}
+                />
               </>
             )}
 

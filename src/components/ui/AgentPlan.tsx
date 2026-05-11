@@ -28,7 +28,7 @@ interface Task {
   subtasks: Subtask[];
 }
 
-export default function AgentPlan({ tasks: initialTasks = [] }: { tasks: Task[] }) {
+const AgentPlan = React.memo(({ tasks: initialTasks = [] }: { tasks: Task[] }) => {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [expandedTasks, setExpandedTasks] = useState<string[]>(initialTasks.length > 0 ? [initialTasks[0].id] : []);
 
@@ -201,4 +201,7 @@ export default function AgentPlan({ tasks: initialTasks = [] }: { tasks: Task[] 
       </motion.div>
     </div>
   );
-}
+});
+
+AgentPlan.displayName = 'AgentPlan';
+export default AgentPlan;

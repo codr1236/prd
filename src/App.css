@@ -172,12 +172,14 @@
   flex: 1;
   border-radius: 32px;
   background: rgba(24, 24, 27, 0.4);
-  backdrop-filter: blur(40px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(63, 63, 70, 0.5);
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
   box-shadow: inset 0 0 100px rgba(0,0,0,0.5);
+  contain: paint;
 }
 
 .content-wrapper {
@@ -188,6 +190,7 @@
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  will-change: transform;
 }
 
 .main-header {
@@ -331,8 +334,8 @@ textarea {
   flex-direction: column;
   gap: 4px;
   background: rgba(9, 9, 11, 0.98);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(63, 63, 70, 0.5);
   box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px rgba(63, 63, 70, 0.3);
 }
